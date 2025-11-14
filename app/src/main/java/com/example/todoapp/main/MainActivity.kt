@@ -16,6 +16,7 @@ class MainActivity : AppCompatActivity() {
         enableEdgeToEdge()
         binding= ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
         binding.bottomNavigation.setOnItemSelectedListener {item ->
             var selectedFragment: Fragment? = null
             when (item.itemId) {
