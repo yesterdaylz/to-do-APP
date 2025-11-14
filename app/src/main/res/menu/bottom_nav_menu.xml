@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- 待办事项选项卡 -->
+    <item
+        android:id="@+id/navigation_todo"
+        android:icon="@mipmap/ic_todo"
+    android:title="待办" />
+    <!-- 个人信息选项卡 -->
+    <item
+        android:id="@+id/navigation_application"
+        android:icon="@mipmap/ic_application"
+    android:title="应用" />
+    <item
+        android:id="@+id/navigation_profile"
+        android:icon="@mipmap/ic_profile"
+    android:title="我的" />
+</menu>
