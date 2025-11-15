@@ -3,12 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/add"
-        android:icon="@drawable/ic_add"
-        android:title="添加"
+        android:icon="@mipmap/self_descipline"
+        android:title="打卡"
         app:showAsAction="always"/>
     <item
-        android:id="@+id/settings"
-        android:icon="@drawable/ic_more"
+        android:id="@+id/more"
+        android:icon="@mipmap/ic_more"
         android:title="设置"
         app:showAsAction="always"/>
 

@@ -1,5 +1,6 @@
 package com.example.todoapp.main
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -20,10 +21,22 @@ private const val ARG_PARAM2 = "param2"
  * create an instance of this fragment.
  */
 class TodoFragment : Fragment() {
+    interface OnDrawerMenuClickListener{
+        fun onDrawerMenuClicked ()
+    }
+    private var drawerMenuClickListener: OnDrawerMenuClickListener? = null
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
     private lateinit var binding: FragmentTodoBinding
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        if (context is OnDrawerMenuClickListener){
+            drawerMenuClickListener = context
+        }else{
+            throw RuntimeException(context.toString() + "must implement OnDrawerMenuClickListener")
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,13 +56,19 @@ class TodoFragment : Fragment() {
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        //顶部栏抽屉
+        binding.toolbar.setNavigationIcon(R.mipmap.ic_drawer)
+        binding.toolbar.setNavigationOnClickListener {
+            drawerMenuClickListener?.onDrawerMenuClicked()
+        }
+        //顶部栏右部分
         binding.toolbar.setOnMenuItemClickListener {
             when(it.itemId){
                 R.id.add -> {
                     Toast.makeText(requireContext(), "Add", Toast.LENGTH_SHORT).show()
                     true
                 }
-                R.id.settings -> {
+                R.id.more -> {
                     Toast.makeText(requireContext(), "Settings", Toast.LENGTH_SHORT).show()
                     true
                 }

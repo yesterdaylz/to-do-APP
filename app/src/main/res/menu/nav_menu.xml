@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+        <item
+            android:id="@+id/countdown"
+            android:icon="@mipmap/ic_countdown"
+            android:title="倒数日" />
+        <item
+            android:id="@+id/fourquadrant"
+            android:icon="@mipmap/ic_four_quadrant"
+            android:title="四象限" />
+        <item
+            android:id="@+id/target"
+            android:icon="@mipmap/ic_target"
+            android:title="目标" />
+        <item
+            android:id="@+id/history"
+            android:icon="@mipmap/ic_history"
+            android:title="历史" />
+
+
+</menu>
