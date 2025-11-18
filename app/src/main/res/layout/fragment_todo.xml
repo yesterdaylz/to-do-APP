@@ -6,8 +6,9 @@
     android:id="@+id/todo"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".main.TodoFragment">
+    tools:context=".ui.fragment.TodoFragment">
     <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appbar_layout"
         android:fitsSystemWindows="true"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -26,14 +27,24 @@
             app:layout_scrollFlags="scroll|enterAlways" />
 
     </com.google.android.material.appbar.AppBarLayout>
-
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="todo"
-        app:layout_constraintTop_toTopOf="parent"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvTodo"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        app:layout_constraintTop_toBottomOf="@id/appbar_layout"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fabAddTodo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="增加待办"
+        app:srcCompat="@drawable/ic_add"
+        android:layout_margin="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

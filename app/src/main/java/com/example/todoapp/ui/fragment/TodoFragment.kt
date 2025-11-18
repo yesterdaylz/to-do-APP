@@ -1,5 +1,6 @@
-package com.example.todoapp.main
+package com.example.todoapp.ui.fragment
 
+//import android.app.ProgressDialog.show
 import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -7,8 +8,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import com.example.todoapp.R
+import com.example.todoapp.adapter.TodoAdapter
 import com.example.todoapp.databinding.FragmentTodoBinding
+import com.example.todoapp.ui.viewmodel.TodoViewModel
+
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -20,7 +25,9 @@ private const val ARG_PARAM2 = "param2"
  * Use the [TodoFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class TodoFragment : Fragment() {
+class TodoFragment : Fragment(R.layout.fragment_todoitem) {
+    private val viewModel : TodoViewModel  by viewModels()
+    private lateinit var adapter: TodoAdapter
     interface OnDrawerMenuClickListener{
         fun onDrawerMenuClicked ()
     }
@@ -63,21 +70,43 @@ class TodoFragment : Fragment() {
         }
         //顶部栏右部分
         binding.toolbar.setOnMenuItemClickListener {
-            when(it.itemId){
+            when (it.itemId) {
                 R.id.add -> {
                     Toast.makeText(requireContext(), "Add", Toast.LENGTH_SHORT).show()
                     true
                 }
+
                 R.id.more -> {
                     Toast.makeText(requireContext(), "Settings", Toast.LENGTH_SHORT).show()
                     true
                 }
+
                 else -> {
                     false
                 }
             }
         }
-
+        adapter = TodoAdapter(
+            onItemClick = { todo ->
+                AddTodoDialogFragment.newInstance(todo)
+                    .show(childFragmentManager, "AddDialogFragment")
+            },
+            onDeleteClick = { todo ->
+                viewModel.deleteTodo(todo)
+            }
+        )
+        binding.rvTodo.layoutManager =
+            androidx.recyclerview.widget.LinearLayoutManager(requireContext())
+        binding.rvTodo.adapter = adapter
+        viewModel.todoList.observe(viewLifecycleOwner) { list ->
+            adapter.submitList(list)
+        }
+        binding.fabAddTodo.setOnClickListener {
+            AddTodoDialogFragment.newInstance(null).show(
+                parentFragmentManager,
+                "add_todo"
+            )
+        }
 
 
     }

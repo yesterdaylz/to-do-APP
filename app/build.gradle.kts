@@ -1,6 +1,9 @@
+//import jdk.tools.jlink.resources.plugins
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.google.devtools.ksp)
+    id("kotlin-parcelize")
 }
 
 android {
@@ -32,15 +35,33 @@ android {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
-    kotlinOptions {
-        jvmTarget = "11"
+    kotlin {
+        compilerOptions {
+            jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_11)
+        }
     }
+//    kotlin {
+//        jvmToolchain(11)
+//    }
     buildFeatures {
         viewBinding = true
+    }
+    ksp {
+        arg("room.schemaLocation", "$projectDir/schemas")
+        arg("room.incremental", "true")
+        arg("room.expandProjection", "true")
     }
 }
 
 dependencies {
+    implementation(libs.androidx.room.runtime)
+    // Room 注解处理器（使用 KSP）
+    ksp(libs.androidx.room.compiler)
+    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.9.4")
+    implementation("androidx.fragment:fragment-ktx:1.8.9")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.9.4")
+    //  Room 的 Kotlin 扩展和协程支持
+    implementation(libs.androidx.room.ktx)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)

@@ -1,0 +1,39 @@
+package com.example.todoapp.ui.viewmodel
+
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.asLiveData
+import androidx.lifecycle.viewModelScope
+import com.example.todoapp.cancelReminder
+import com.example.todoapp.data.database.TodoDatabase
+import com.example.todoapp.data.entity.Todo
+import com.example.todoapp.scheduleReminder
+import kotlinx.coroutines.launch
+
+class TodoViewModel(application: Application): AndroidViewModel(application) {
+    private val todoDao = TodoDatabase.getInstance(application).todoDao()
+    val todoList: LiveData<List<Todo>> = todoDao.getAllTodos().asLiveData()
+    fun addTodo(todo: Todo){
+        viewModelScope.launch {
+            val id = todoDao.insert(todo)
+            val inserted = todo.copy(id = id)
+            //Log.d("MainActivity", "Back button pressed")
+            scheduleReminder(getApplication(), inserted)
+        }
+    }
+    fun updateTodo(todo: Todo) {
+        viewModelScope.launch {
+            todoDao.update(todo)
+            scheduleReminder(getApplication(), todo)   // 更新时重新设置闹钟
+        }
+    }
+
+    fun deleteTodo(todo: Todo) {
+        viewModelScope.launch {
+            todoDao.delete(todo)
+            cancelReminder(getApplication(),todo)
+        }
+    }
+
+}
