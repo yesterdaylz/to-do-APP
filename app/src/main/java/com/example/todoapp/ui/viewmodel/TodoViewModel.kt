@@ -13,7 +13,9 @@ import kotlinx.coroutines.launch
 
 class TodoViewModel(application: Application): AndroidViewModel(application) {
     private val todoDao = TodoDatabase.getInstance(application).todoDao()
-    val todoList: LiveData<List<Todo>> = todoDao.getAllTodos().asLiveData()
+    //val todoList: LiveData<List<Todo>> = todoDao.getAllTodos().asLiveData()
+    fun getTodoList(username: String): LiveData<List<Todo>> =
+             todoDao.getTodoByUser(username).asLiveData()
     fun addTodo(todo: Todo){
         viewModelScope.launch {
             val id = todoDao.insert(todo)

@@ -10,10 +10,11 @@ import kotlinx.parcelize.Parcelize
 @Entity(tableName = "todo")
 data class Todo(
     @PrimaryKey(autoGenerate = true) val  id : Long = 0,
-    val title : String,
-    val description : String?,
-    val dueDay : Long,
-    val remindTime : Long?,
-    val done : Boolean = false,
+    val username: String,
+    val title: String,
+    val description: String?,
+    val dueDay: Long,
+    val remindTime: Long?,
+    val done: Boolean = false,
     val createdAt: Long = System.currentTimeMillis()
     ): Parcelable

@@ -12,8 +12,8 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface TodoDao {
     //按截止日期升序排序
-    @Query("SELECT * FROM todo ORDER BY DueDay ASC")
-    fun getAllTodos(): Flow<List<Todo>>
+    @Query("SELECT * FROM todo WHERE username = :username ORDER by dueDay ASC")
+    fun getTodoByUser(username: String): Flow<List<Todo>>
 
     @Insert(onConflict = OnConflictStrategy.Companion.REPLACE)
     suspend fun insert(todo: Todo): Long
