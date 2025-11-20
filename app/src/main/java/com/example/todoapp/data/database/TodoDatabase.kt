@@ -23,8 +23,7 @@ abstract class TodoDatabase : RoomDatabase() {
                     TodoDatabase::class.java,
                     "todo_db"
                 )
-                    // 添加迁移策略，避免版本升级时崩溃
-                    .fallbackToDestructiveMigrationOnDowngrade(true)
+                    .fallbackToDestructiveMigration(true)
                     .build()
                     .also { INSTANCE = it }
             }

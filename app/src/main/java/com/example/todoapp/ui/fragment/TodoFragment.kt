@@ -17,8 +17,9 @@ import com.example.todoapp.ui.viewmodel.TodoViewModel
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
+//private const val ARG_PARAM1 = "param1"
+//private const val ARG_PARAM2 = "param2"
+
 
 /**
  * A simple [Fragment] subclass.
@@ -28,13 +29,14 @@ private const val ARG_PARAM2 = "param2"
 class TodoFragment : Fragment(R.layout.fragment_todoitem) {
     private val viewModel : TodoViewModel  by viewModels()
     private lateinit var adapter: TodoAdapter
+    private lateinit var username: String
     interface OnDrawerMenuClickListener{
         fun onDrawerMenuClicked ()
     }
     private var drawerMenuClickListener: OnDrawerMenuClickListener? = null
     // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+    //private var param1: String? = null
+    //private var param2: String? = null
     private lateinit var binding: FragmentTodoBinding
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -48,8 +50,7 @@ class TodoFragment : Fragment(R.layout.fragment_todoitem) {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
+            username = it.getString(ARG_PARAM1) ?:""
         }
     }
 
@@ -88,7 +89,7 @@ class TodoFragment : Fragment(R.layout.fragment_todoitem) {
         }
         adapter = TodoAdapter(
             onItemClick = { todo ->
-                AddTodoDialogFragment.newInstance(todo)
+                AddTodoDialogFragment.newInstance(todo,username)
                     .show(childFragmentManager, "AddDialogFragment")
             },
             onDeleteClick = { todo ->
@@ -98,11 +99,11 @@ class TodoFragment : Fragment(R.layout.fragment_todoitem) {
         binding.rvTodo.layoutManager =
             androidx.recyclerview.widget.LinearLayoutManager(requireContext())
         binding.rvTodo.adapter = adapter
-        viewModel.todoList.observe(viewLifecycleOwner) { list ->
+        viewModel.getTodoList(username).observe(viewLifecycleOwner) { list ->
             adapter.submitList(list)
         }
         binding.fabAddTodo.setOnClickListener {
-            AddTodoDialogFragment.newInstance(null).show(
+            AddTodoDialogFragment.newInstance(null,username).show(
                 parentFragmentManager,
                 "add_todo"
             )
@@ -122,17 +123,17 @@ class TodoFragment : Fragment(R.layout.fragment_todoitem) {
          * Use this factory method to create a new instance of
          * this fragment using the provided parameters.
          *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
+         *
+         *
          * @return A new instance of fragment TodoFragment.
          */
         // TODO: Rename and change types and number of parameters
+        private const val ARG_PARAM1 = "username"
         @JvmStatic
-        fun newInstance(param1: String, param2: String) =
+        fun newInstance(username: String) =
             TodoFragment().apply {
                 arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+                    putString(ARG_PARAM1, username)
                 }
             }
     }

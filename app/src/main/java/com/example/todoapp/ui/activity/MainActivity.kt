@@ -19,6 +19,7 @@ import com.example.todoapp.ui.fragment.TodoFragment
 class MainActivity : AppCompatActivity(), TodoFragment.OnDrawerMenuClickListener {
     val fromAlbum = 1
     lateinit var binding: ActivityMainBinding
+    private lateinit var username: String
     private val choosePictureLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             val imageView = findViewById<ImageView>(R.id.imageView)
@@ -35,6 +36,11 @@ class MainActivity : AppCompatActivity(), TodoFragment.OnDrawerMenuClickListener
 
         binding= ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        username = intent.getStringExtra("username") ?: ""
+
+
+
+
         val headerView = binding.navView.getHeaderView(0)
         // 从头部视图中查找ImageView
         val headerImageView = headerView.findViewById<ImageView>(R.id.imageView)
@@ -46,24 +52,24 @@ class MainActivity : AppCompatActivity(), TodoFragment.OnDrawerMenuClickListener
             choosePictureLauncher.launch(intent)
         }
         binding.bottomNavigation.setOnItemSelectedListener {item ->
-            var selectedFragment: Fragment? = null
-            when (item.itemId) {
+            val selectedFragment: Fragment = when (item.itemId) {
                 R.id.navigation_todo-> {
-                    selectedFragment = TodoFragment()
+                    TodoFragment.newInstance(username)
                 }
                 R.id.navigation_profile -> {
-                    selectedFragment = ProfileFragment()
+                    ProfileFragment()
                 }
                 R.id.navigation_application -> {
-                    selectedFragment = ApplicationFragment()
+                    ApplicationFragment()
                 }
+                else -> TodoFragment.newInstance(username)
             }
-            selectedFragment?.let {
+
                 supportFragmentManager.beginTransaction()
-                    .replace(R.id.fragment_container, it)
+                    .replace(R.id.fragment_container, selectedFragment)
                     .commit()
-            }
-            true
+
+                 true
         }
         if (savedInstanceState == null) {
             binding.bottomNavigation.selectedItemId = R.id.navigation_todo

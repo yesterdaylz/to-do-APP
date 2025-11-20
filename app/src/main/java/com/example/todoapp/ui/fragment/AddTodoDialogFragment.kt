@@ -25,10 +25,12 @@ class AddTodoDialogFragment: DialogFragment() {
     private var remindTimeMillis: Long? = null
     private val dueCalendar: Calendar = Calendar.getInstance()
     private val remindCalendar: Calendar = Calendar.getInstance()
+    private lateinit var username: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         editingTodo = arguments?.getParcelable(ARG_TODO)
+        username = arguments?.getString(ARG_USERNAME) ?: ""
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -83,6 +85,7 @@ class AddTodoDialogFragment: DialogFragment() {
                 dueDay = dueTimeMillis,
                 remindTime = remindTimeMillis
             ) ?: Todo(
+                username = username,
                 title = title,
                 description = desc,
                 dueDay = dueTimeMillis,
@@ -105,12 +108,13 @@ class AddTodoDialogFragment: DialogFragment() {
 
     companion object {
         private const val ARG_TODO = "arg_todo"
-
-        fun newInstance(todo: Todo?): AddTodoDialogFragment {
+        private const val ARG_USERNAME = "arg_username"
+        fun newInstance(todo: Todo?,username: String): AddTodoDialogFragment {
             val f = AddTodoDialogFragment()
             val args = Bundle()
 
             args.putParcelable(ARG_TODO, todo)
+            args.putString(ARG_USERNAME, username)
             f.arguments = args
             return f
         }
