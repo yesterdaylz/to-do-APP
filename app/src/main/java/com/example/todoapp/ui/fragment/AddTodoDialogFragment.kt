@@ -84,13 +84,18 @@ class AddTodoDialogFragment: DialogFragment() {
                 description = desc,
                 dueDay = dueTimeMillis,
                 remindTime = remindTimeMillis
-            ) ?: Todo(
-                username = username,
-                title = title,
-                description = desc,
-                dueDay = dueTimeMillis,
-                remindTime = remindTimeMillis
-            )
+            ) ?: run{
+                val randomBg = (0 until TODO_BG_COUNT).random()
+                Todo(
+                    username = username,
+                    title = title,
+                    description = desc,
+                    dueDay = dueTimeMillis,
+                    remindTime = remindTimeMillis,
+                    background = randomBg
+                )
+            }
+
 
             if (editingTodo == null) {
                 viewModel.addTodo(todo)
@@ -109,6 +114,7 @@ class AddTodoDialogFragment: DialogFragment() {
     companion object {
         private const val ARG_TODO = "arg_todo"
         private const val ARG_USERNAME = "arg_username"
+        private const val  TODO_BG_COUNT = 5
         fun newInstance(todo: Todo?,username: String): AddTodoDialogFragment {
             val f = AddTodoDialogFragment()
             val args = Bundle()

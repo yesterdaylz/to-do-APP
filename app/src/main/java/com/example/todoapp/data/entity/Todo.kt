@@ -16,5 +16,6 @@ data class Todo(
     val dueDay: Long,
     val remindTime: Long?,
     val done: Boolean = false,
-    val createdAt: Long = System.currentTimeMillis()
-    ): Parcelable
+    val createdAt: Long = System.currentTimeMillis(),
+    val background: Int = 0
+): Parcelable

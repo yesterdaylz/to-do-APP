@@ -18,7 +18,16 @@ class TodoAdapter (
     private val onItemClick: (Todo) -> Unit,
     private val onDeleteClick: (Todo) -> Unit
 ): ListAdapter<Todo, TodoAdapter.TodoViewHolder>(DiffCallback()){
+    private val backgrounds = listOf(
+        R.drawable.bg_todo_1,
+        R.drawable.bg_todo_2,
+        R.drawable.bg_todo_3,
+        R.drawable.bg_todo_4,
+        R.drawable.bg_todo_5,
+    )
     class TodoViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        //val cardTodo :com.google.android.material.card.MaterialCardView= itemView.findViewById(R.id.cardTodo)
+        val img: android.widget.ImageView = itemView.findViewById(R.id.img)
         val tvTitle: TextView = itemView.findViewById(R.id.tvTitle)
         val tvDescription: TextView = itemView.findViewById(R.id.tvDescription)
         val tvDueTime: TextView = itemView.findViewById(R.id.tvDueTime)
@@ -46,6 +55,10 @@ class TodoAdapter (
         val date = Date(item.dueDay)
         val format = SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault())
         holder.tvDueTime.text = "截止：${format.format(date)}"
+        val safeIndex = item.background.coerceIn(0, backgrounds.lastIndex)
+        //holder.cardTodo.setBackgroundResource(backgrounds[safeIndex])
+        //val drawable = ContextCompat.getDrawable(holder.itemView.context, backgrounds[safeIndex])
+        holder.img.setImageResource(backgrounds[safeIndex])
 
         holder.itemView.setOnClickListener { onItemClick(item) }
         holder.btnDelete.setOnClickListener { onDeleteClick(item) }
