@@ -13,6 +13,7 @@ import androidx.fragment.app.Fragment
 import com.example.todoapp.R
 import com.example.todoapp.databinding.ActivityMainBinding
 import com.example.todoapp.ui.fragment.ApplicationFragment
+import com.example.todoapp.ui.fragment.ClockFragment
 import com.example.todoapp.ui.fragment.ProfileFragment
 import com.example.todoapp.ui.fragment.TodoFragment
 
@@ -61,6 +62,9 @@ class MainActivity : AppCompatActivity(), TodoFragment.OnDrawerMenuClickListener
                 }
                 R.id.navigation_application -> {
                     ApplicationFragment()
+                }
+                R.id.navigation_sandglass ->{
+                    ClockFragment()
                 }
                 else -> TodoFragment.newInstance(username)
             }
