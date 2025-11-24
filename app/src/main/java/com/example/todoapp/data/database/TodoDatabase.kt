@@ -9,11 +9,10 @@ import com.example.todoapp.data.dao.UserDao
 import com.example.todoapp.data.entity.Todo
 import com.example.todoapp.data.entity.User
 
-@Database(entities = [Todo::class, User::class], version = 2)
+@Database(entities = [Todo::class, User::class], version = 3)
 abstract class TodoDatabase : RoomDatabase() {
     abstract fun todoDao(): TodoDao
     abstract fun userDao(): UserDao
-//单例模式，原则上全局应该只存 在一份实例
     companion object {
         @Volatile private var INSTANCE: TodoDatabase? = null
         fun getInstance(context: Context): TodoDatabase {

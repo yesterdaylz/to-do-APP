@@ -10,7 +10,7 @@
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="每天进步一点点"
+        android:text="每天进步一点点🍋"
         android:textSize="17dp"
         android:layout_marginTop="35dp"
         app:layout_constraintStart_toStartOf="@+id/imageView"

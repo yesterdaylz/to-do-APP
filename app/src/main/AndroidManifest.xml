@@ -16,16 +16,19 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ToDoApp">
         <activity
+            android:name=".ui.activity.EditProfileActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.activity.RegisterActivity"
             android:exported="false" />
         <activity
             android:name=".ui.activity.LoginActivity"
-            android:exported="true" >
-        <intent-filter>
-            <action android:name="android.intent.action.MAIN" />
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
-            <category android:name="android.intent.category.LAUNCHER" />
-        </intent-filter>
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
 
         <receiver
@@ -35,9 +38,8 @@
 
         <activity
             android:name=".ui.activity.MainActivity"
-            android:exported="true">
+            android:exported="true"/>
 
-        </activity>
     </application>
 
 </manifest>

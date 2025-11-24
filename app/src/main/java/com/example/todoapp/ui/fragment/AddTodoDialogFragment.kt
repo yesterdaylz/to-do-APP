@@ -114,7 +114,7 @@ class AddTodoDialogFragment: DialogFragment() {
     companion object {
         private const val ARG_TODO = "arg_todo"
         private const val ARG_USERNAME = "arg_username"
-        private const val  TODO_BG_COUNT = 5
+        private const val  TODO_BG_COUNT = 10
         fun newInstance(todo: Todo?,username: String): AddTodoDialogFragment {
             val f = AddTodoDialogFragment()
             val args = Bundle()
