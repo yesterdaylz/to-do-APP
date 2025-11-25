@@ -21,6 +21,10 @@ class MainActivity : AppCompatActivity(), TodoFragment.OnDrawerMenuClickListener
     val fromAlbum = 1
     lateinit var binding: ActivityMainBinding
     private lateinit var username: String
+    private val prefs by lazy {
+        getSharedPreferences("main_prefs", MODE_PRIVATE)
+    }
+
     private val choosePictureLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             val imageView = findViewById<ImageView>(R.id.imageView)
@@ -52,20 +56,14 @@ class MainActivity : AppCompatActivity(), TodoFragment.OnDrawerMenuClickListener
             intent.type = "image/*"
             choosePictureLauncher.launch(intent)
         }
+        val lastTabId = prefs.getInt("last_tab_id", R.id.navigation_todo)
         binding.bottomNavigation.setOnItemSelectedListener {item ->
+            prefs.edit().putInt("last_tab_id", item.itemId).apply()
             val selectedFragment: Fragment = when (item.itemId) {
-                R.id.navigation_todo-> {
-                    TodoFragment.newInstance(username)
-                }
-                R.id.navigation_profile -> {
-                    ProfileFragment()
-                }
-                R.id.navigation_application -> {
-                    ApplicationFragment()
-                }
-                R.id.navigation_sandglass ->{
-                    ClockFragment()
-                }
+                R.id.navigation_todo -> TodoFragment.newInstance(username)
+                R.id.navigation_profile -> ProfileFragment()
+                R.id.navigation_application -> ApplicationFragment()
+                R.id.navigation_sandglass -> ClockFragment()
                 else -> TodoFragment.newInstance(username)
             }
 
@@ -75,9 +73,10 @@ class MainActivity : AppCompatActivity(), TodoFragment.OnDrawerMenuClickListener
 
                  true
         }
-        if (savedInstanceState == null) {
-            binding.bottomNavigation.selectedItemId = R.id.navigation_todo
-        }
+        binding.bottomNavigation.selectedItemId = lastTabId
+//        if (savedInstanceState == null) {
+//            binding.bottomNavigation.selectedItemId = R.id.navigation_todo
+//        }
 //        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
 //            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
 //            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)

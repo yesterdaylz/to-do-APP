@@ -25,12 +25,22 @@ class ClockFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View{
+
         binding = FragmentClockBinding.inflate(inflater, container, false)
         return binding.root
+
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        if(savedInstanceState!= null){
+            offset = savedInstanceState.getLong(OFFSET_KEY)
+            running = savedInstanceState.getBoolean(RUNNING_KEY)
+            if (running) {
+                binding.watcher.base =savedInstanceState.getLong(BASE_KEY)
+                binding.watcher.start()
+            }else setBaseTime()
+        }
         binding.start.setOnClickListener {
             if (!running) {
                 setBaseTime()
@@ -49,6 +59,13 @@ class ClockFragment : Fragment() {
             offset = 0
             setBaseTime()
         }
+    }
+
+    override fun onSaveInstanceState(savedInstanceState: Bundle) {
+        savedInstanceState.putLong(OFFSET_KEY, offset)
+        savedInstanceState.putBoolean(RUNNING_KEY, running)
+        savedInstanceState.putLong(BASE_KEY, binding.watcher.base)
+        super.onSaveInstanceState(savedInstanceState)
     }
     fun setBaseTime(){
         //stopwatch.base = SystemClock.elapsedRealtime() - offset
