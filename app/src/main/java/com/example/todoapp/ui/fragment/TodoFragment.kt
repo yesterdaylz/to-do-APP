@@ -73,12 +73,16 @@ class TodoFragment : Fragment(R.layout.fragment_todoitem) {
         binding.toolbar.setOnMenuItemClickListener {
             when (it.itemId) {
                 R.id.add -> {
-                    Toast.makeText(requireContext(), "Add", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), "打卡", Toast.LENGTH_SHORT).show()
                     true
                 }
 
                 R.id.more -> {
                     Toast.makeText(requireContext(), "Settings", Toast.LENGTH_SHORT).show()
+                    true
+                }
+                R.id.important -> {
+                    ImportantDialogFragment().show(childFragmentManager, "ImportantDialogFragment")
                     true
                 }
 

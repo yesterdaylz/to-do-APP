@@ -60,6 +60,7 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.9.4")
     implementation("androidx.fragment:fragment-ktx:1.8.9")
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.9.4")
+    implementation("androidx.work:work-runtime-ktx:2.11.0")
     //  Room 的 Kotlin 扩展和协程支持
     implementation(libs.androidx.room.ktx)
     implementation(libs.androidx.core.ktx)

@@ -1,13 +1,18 @@
 package com.example.todoapp.ui.activity
 
+import android.Manifest
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.BitmapFactory
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.widget.ImageView
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
 import androidx.fragment.app.Fragment
 import com.example.todoapp.R
@@ -18,6 +23,9 @@ import com.example.todoapp.ui.fragment.ProfileFragment
 import com.example.todoapp.ui.fragment.TodoFragment
 
 class MainActivity : AppCompatActivity(), TodoFragment.OnDrawerMenuClickListener {
+    companion object {
+        private const val REQ_POST_NOTIFICATIONS = 1001
+    }
     val fromAlbum = 1
     lateinit var binding: ActivityMainBinding
     private lateinit var username: String
@@ -38,6 +46,7 @@ class MainActivity : AppCompatActivity(), TodoFragment.OnDrawerMenuClickListener
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+        requestNotificationPermissionIfNeeded()
 
         binding= ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -106,6 +115,33 @@ class MainActivity : AppCompatActivity(), TodoFragment.OnDrawerMenuClickListener
         .openFileDescriptor(uri, "r")?.use {
             BitmapFactory.decodeFileDescriptor(it.fileDescriptor)
         }
+    private fun requestNotificationPermissionIfNeeded() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            val granted = ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.POST_NOTIFICATIONS
+            ) == PackageManager.PERMISSION_GRANTED
+
+            if (!granted) {
+                ActivityCompat.requestPermissions(
+                    this,
+                    arrayOf(Manifest.permission.POST_NOTIFICATIONS),
+                    REQ_POST_NOTIFICATIONS
+                )
+            }
+        }
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+//        if (requestCode == REQ_POST_NOTIFICATIONS) {
+//            // 可选：根据用户是否同意做一些提示
+//        }
+    }
 
 
 }

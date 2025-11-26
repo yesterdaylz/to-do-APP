@@ -7,6 +7,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
+import android.util.Log
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
@@ -16,6 +17,7 @@ import com.example.todoapp.ui.activity.MainActivity
 class TodoReminderReceiver : BroadcastReceiver() {
 
     override fun onReceive(context: Context, intent: Intent) {
+        Log.d("ReminderReceiver", "Broadcast received!")
         val title = intent.getStringExtra("title") ?: "待办提醒"
         val description = intent.getStringExtra("description") ?: ""
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
