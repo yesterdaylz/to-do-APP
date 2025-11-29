@@ -17,5 +17,7 @@ data class Todo(
     val remindTime: Long?,
     val done: Boolean = false,
     val createdAt: Long = System.currentTimeMillis(),
-    val background: Int = 0
+    val background: Int = 0,
+    val category: String? = "默认",
+    val pin: Boolean = false
 ): Parcelable

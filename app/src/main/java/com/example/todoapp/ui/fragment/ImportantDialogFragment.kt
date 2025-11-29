@@ -2,7 +2,6 @@ package com.example.todoapp.ui.fragment
 
 import android.app.Dialog
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
 import android.view.LayoutInflater
@@ -12,6 +11,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.core.net.toUri
 import androidx.fragment.app.DialogFragment
 import com.example.todoapp.R
 
@@ -47,8 +47,7 @@ class ImportantDialogFragment : DialogFragment() {
         return dialog
     }
     private fun showGide1() {
-        val guideView = LayoutInflater.from(requireContext())
-            .inflate(R.layout.dialog_pemission, null)
+        val guideView = layoutInflater.inflate(R.layout.dialog_pemission, null)
         guideView.findViewById<TextView>(R.id.tv_guide_title).text =
             "vivo新系统在锁屏后会休眠App，这会导致待办、计时结束不提醒等问题。请按以下指引来设置权限。"
         guideView.findViewById<TextView>(R.id.tv_guide_description).text =
@@ -65,8 +64,7 @@ class ImportantDialogFragment : DialogFragment() {
         guideDialog.show()
     }
     private fun showGide2() {
-        val guideView = LayoutInflater.from(requireContext())
-            .inflate(R.layout.dialog_pemission, null)
+        val guideView = layoutInflater.inflate(R.layout.dialog_pemission, null)
         guideView.findViewById<TextView>(R.id.tv_guide_title).text =
             "请开启自启动权限，确保应用能够正常启动定时提醒"
         guideView.findViewById<TextView>(R.id.tv_guide_description).text =
@@ -85,8 +83,7 @@ class ImportantDialogFragment : DialogFragment() {
         guideDialog.show()
     }
     private fun showGide3() {
-        val guideView = LayoutInflater.from(requireContext())
-            .inflate(R.layout.dialog_pemission, null)
+        val guideView = layoutInflater.inflate(R.layout.dialog_pemission, null)
         guideView.findViewById<TextView>(R.id.tv_guide_title).text =
             "请在多任务界面锁定应用，防止被一键清理"
         guideView.findViewById<TextView>(R.id.tv_guide_description).text =
@@ -128,7 +125,8 @@ class ImportantDialogFragment : DialogFragment() {
     private fun openAutoStartSetting() {
         try {
             val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
-            intent.data = Uri.parse("package:${requireContext().packageName}")
+            //intent.data = Uri.parse("package:${requireContext().packageName}")
+            intent.data = "package:${requireContext().packageName}".toUri()
             Toast.makeText(requireContext(), "点击权限-打开【自启动】", Toast.LENGTH_LONG).show()
             startActivity(intent)
         } catch (e: Exception) {
@@ -137,7 +135,7 @@ class ImportantDialogFragment : DialogFragment() {
     }
     private fun openAppSetting() {
         val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
-        intent.data = Uri.parse("package:${requireContext().packageName}")
+        intent.data = "package:${requireContext().packageName}".toUri()
         startActivity(intent)
     }
 }

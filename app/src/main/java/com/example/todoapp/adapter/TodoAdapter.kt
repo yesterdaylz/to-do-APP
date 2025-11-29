@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -37,6 +38,8 @@ class TodoAdapter (
         val tvDescription: TextView = itemView.findViewById(R.id.tvDescription)
         val tvDueTime: TextView = itemView.findViewById(R.id.tvDueTime)
         val btnDelete: ImageButton = itemView.findViewById(R.id.btnDelete)
+        val tvCategory: TextView = itemView.findViewById(R.id.tvCategory)
+        val imgPin: ImageView = itemView.findViewById(R.id.imgPin)
     }
     class DiffCallback : DiffUtil.ItemCallback<Todo>() {
         override fun areItemsTheSame(oldItem: Todo, newItem: Todo) =
@@ -60,6 +63,8 @@ class TodoAdapter (
         val date = Date(item.dueDay)
         val format = SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault())
         holder.tvDueTime.text = "截止：${format.format(date)}"
+        holder.imgPin.visibility = if (item.pin) View.VISIBLE else View.GONE//标记是否置顶
+        holder.tvCategory.text = item.category ?: "默认"
         val safeIndex = item.background.coerceIn(0, backgrounds.lastIndex)
         //holder.cardTodo.setBackgroundResource(backgrounds[safeIndex])
         //val drawable = ContextCompat.getDrawable(holder.itemView.context, backgrounds[safeIndex])

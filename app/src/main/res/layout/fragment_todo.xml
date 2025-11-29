@@ -12,7 +12,9 @@
         android:fitsSystemWindows="true"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#E7DC80"
+        android:background="@color/Yellow"
+
+        app:backgroundTint="?attr/colorPrimary"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -24,6 +26,7 @@
             android:layout_height="?attr/actionBarSize"
             app:title="待办"
             app:titleTextColor="@android:color/black"
+
             app:menu="@menu/todo_menu"
             app:layout_scrollFlags="scroll|enterAlways" />
 

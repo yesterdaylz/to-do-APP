@@ -9,7 +9,7 @@ import com.example.todoapp.data.dao.UserDao
 import com.example.todoapp.data.entity.Todo
 import com.example.todoapp.data.entity.User
 
-@Database(entities = [Todo::class, User::class], version = 3)
+@Database(entities = [Todo::class, User::class], version = 4)
 abstract class TodoDatabase : RoomDatabase() {
     abstract fun todoDao(): TodoDao
     abstract fun userDao(): UserDao

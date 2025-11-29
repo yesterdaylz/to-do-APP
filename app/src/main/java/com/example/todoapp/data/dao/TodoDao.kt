@@ -11,8 +11,8 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface TodoDao {
-    //按截止日期升序排序
-    @Query("SELECT * FROM todo WHERE username = :username ORDER by dueDay ASC")
+    //按是否置顶降序（1，0），截止日期升序排序（早的在前）
+    @Query("SELECT * FROM todo WHERE username = :username ORDER by pin DESC ,dueDay ASC")
     fun getTodoByUser(username: String): Flow<List<Todo>>
 
     @Insert(onConflict = OnConflictStrategy.Companion.REPLACE)

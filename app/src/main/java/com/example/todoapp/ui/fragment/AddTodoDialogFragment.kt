@@ -42,13 +42,31 @@ class AddTodoDialogFragment: DialogFragment() {
         val btnPickDueTime = view.findViewById<Button>(R.id.btnPickDueTime)
         val btnPickRemindTime = view.findViewById<Button>(R.id.btnPickRemindTime)
         val btnSave = view.findViewById<Button>(R.id.btnSave)
-
+        val spCategory = view.findViewById<android.widget.Spinner>(R.id.spCategory)
+        val cbPin= view.findViewById<android.widget.CheckBox>(R.id.cbTop)
+        val categories = listOf("默认", "学习", "工作", "生活", "其他")
         editingTodo?.let { todo ->
+            //下拉适配器
+            val adapterCategory = android.widget.ArrayAdapter(
+                requireContext(),
+                android.R.layout.simple_spinner_item,
+                categories
+            ).apply {
+                setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            }
+            spCategory.adapter = adapterCategory
             etTitle.setText(todo.title)
             etDescription.setText(todo.description ?: "")
             dueTimeMillis = todo.dueDay
             remindTimeMillis = todo.remindTime
+            val index = categories.indexOf(todo.category).takeIf { it >= 0 } ?: 0
+            spCategory.setSelection(index)//设置选中索引
+            cbPin.isChecked = todo.pin
         }
+
+
+
+
 
         btnPickDueTime.setOnClickListener {
             showDateTimePicker(
@@ -73,6 +91,8 @@ class AddTodoDialogFragment: DialogFragment() {
         btnSave.setOnClickListener {
             val title = etTitle.text.toString().trim()
             val desc = etDescription.text.toString().trim()
+            val category = spCategory.selectedItem?.toString() ?: "默认"//NullPointerException哭了
+            val pin = cbPin.isChecked
 
             if (title.isEmpty()) {
                 etTitle.error = "标题不能为空"
@@ -83,7 +103,9 @@ class AddTodoDialogFragment: DialogFragment() {
                 title = title,
                 description = desc,
                 dueDay = dueTimeMillis,
-                remindTime = remindTimeMillis
+                remindTime = remindTimeMillis,
+                category = category,
+                pin = pin
             ) ?: run{
                 val randomBg = (0 until TODO_BG_COUNT).random()
                 Todo(
@@ -92,7 +114,9 @@ class AddTodoDialogFragment: DialogFragment() {
                     description = desc,
                     dueDay = dueTimeMillis,
                     remindTime = remindTimeMillis,
-                    background = randomBg
+                    background = randomBg,
+                    category = category,
+                    pin = pin
                 )
             }
 
