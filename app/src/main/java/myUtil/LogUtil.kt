@@ -1,7 +1,7 @@
 package myUtil
 
 import android.util.Log
-
+//这只是一个小小的调试工具
 object LogUtil {
     private const val VERBOSE = 1
     private const val DEBUG = 2

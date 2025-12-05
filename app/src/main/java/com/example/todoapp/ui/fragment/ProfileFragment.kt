@@ -17,7 +17,6 @@ import com.example.todoapp.R
 import com.example.todoapp.data.database.TodoDatabase
 import com.example.todoapp.data.entity.User
 import com.example.todoapp.databinding.FragmentProfileBinding
-import com.example.todoapp.ui.activity.EditProfileActivity
 import com.example.todoapp.ui.activity.LoginActivity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -83,9 +82,12 @@ class ProfileFragment : Fragment() {
             pickImageLauncher.launch("image/*")
         }
         binding.itemEdit.setOnClickListener {
-            val intent = Intent(requireContext(), EditProfileActivity::class.java)
-            startActivity(intent)
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, EditProfileFragment())
+                .addToBackStack(null)
+                .commit()
         }
+
         binding.itemSettings.setOnClickListener {
             Toast.makeText(requireContext(), "设置 - 敬请期待", Toast.LENGTH_SHORT).show()
         }

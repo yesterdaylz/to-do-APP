@@ -19,13 +19,13 @@ class TodoReminderReceiver : BroadcastReceiver() {
         //Log.d("ReminderReceiver", "Broadcast received!")
         val title = intent.getStringExtra("title") ?: "待办提醒"
         val description = intent.getStringExtra("description") ?: ""
+        //检查权限
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             if (ActivityCompat.checkSelfPermission(
                     context,
                     Manifest.permission.POST_NOTIFICATIONS
                 ) != PackageManager.PERMISSION_GRANTED
             ) {
-
                 return
             }
         }

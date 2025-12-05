@@ -14,7 +14,7 @@ import com.example.todoapp.databinding.ActivityRegisterBinding
 import kotlinx.coroutines.launch
 
 class RegisterActivity : AppCompatActivity() {
-    private lateinit var  binding: ActivityRegisterBinding
+    private lateinit var binding: ActivityRegisterBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -25,20 +25,24 @@ class RegisterActivity : AppCompatActivity() {
             val username = binding.etUsername.text.toString().trim()
             val pwd = binding.etPwd.text.toString().trim()
             val pwdAgain = binding.etPwdAgain.text.toString().trim()
+            //判空
             if(username.isEmpty()||pwd.isEmpty()||pwdAgain.isEmpty()){
                 if(username.isEmpty()){binding.etUsername.error = "账号不能为空"}
                 if(pwd.isEmpty()){binding.etPwd.error = "密码不能为空"}
                 if(pwdAgain.isEmpty()){binding.etPwdAgain.error = "请再次输入密码"}
-                return@setOnClickListener//判空
+                return@setOnClickListener
             }
+            //判密码规范
             if(!isRightPassword(pwd)){
                 Toast.makeText(this, "密码必须包含字母和数字，且不少于8位", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
-            if (pwd != pwdAgain) {
+            //判前后密码
+            if(pwd != pwdAgain) {
                 Toast.makeText(this, "两次密码不一致", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
+            //存储密码
             lifecycleScope.launch {
                 val exist = userDao.getByUsername(username)
                 if(exist != null){
@@ -56,6 +60,7 @@ class RegisterActivity : AppCompatActivity() {
             insets
         }
     }
+    //合法密码
     private fun isRightPassword(password: String): Boolean {
         if(password.length < 8){
             return false

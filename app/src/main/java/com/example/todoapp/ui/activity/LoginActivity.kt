@@ -27,11 +27,13 @@ class LoginActivity : AppCompatActivity() {
         setContentView(binding.root)
         val userDao = TodoDatabase.getInstance(this).userDao()
         val loginUser = prefs.getString("login_user",null)
+        //登陆过的用户自动登录
         if(loginUser != null){
             goToMain(loginUser)
             finish()
             return
         }
+        //判断用户之前是否选中记住密码
         val remember = prefs.getBoolean("remember_password",false)
         if (remember){
             binding.etUsername.setText(prefs.getString("sv_username",""))
@@ -45,15 +47,15 @@ class LoginActivity : AppCompatActivity() {
                 Toast.makeText(this,"账号或密码不能为空",Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
-            lifecycleScope.launch{//->启动的协程会与组件的生周期自动绑定
+            //启动协程，与当前Activity生命周期绑定，避免内存泄漏
+            lifecycleScope.launch{
                 val user = userDao.login(username, pwd )
                 if(user != null){
                     rememberPassword(username,pwd,binding.remenberPass)
+                    //保存已登录的用户
                     prefs.edit{
                         putString("login_user",username)
                     }
-
-
                     goToMain(username)
                     finish()
                 }else{
@@ -62,6 +64,7 @@ class LoginActivity : AppCompatActivity() {
 
             }
         }
+        //跳转到注册界面
         binding.btnRegister.setOnClickListener {
             startActivity(Intent(this, RegisterActivity::class.java))
         }
@@ -74,7 +77,8 @@ class LoginActivity : AppCompatActivity() {
         }
 
     }
-    private fun rememberPassword(username: String,pwd: String,rm : CheckBox){
+    //记住密码
+    private fun rememberPassword(username: String,pwd: String,rm: CheckBox){
         prefs.edit {
             if (rm.isChecked) {
                 putString("sv_username", username)
@@ -87,6 +91,7 @@ class LoginActivity : AppCompatActivity() {
             }
         }
     }
+    //带上用户名，前往主页
     private fun goToMain(username: String){
         val intent = Intent(this, MainActivity::class.java)
         intent.putExtra("username",username)//传递用户名

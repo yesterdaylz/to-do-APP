@@ -6,40 +6,33 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.example.todoapp.R
 import com.example.todoapp.adapter.TodoAdapter
+import com.example.todoapp.data.entity.Todo
 import com.example.todoapp.databinding.FragmentTodoBinding
 import com.example.todoapp.ui.viewmodel.TodoViewModel
 
-
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-//private const val ARG_PARAM1 = "param1"
-//private const val ARG_PARAM2 = "param2"
-
-
-/**
- * A simple [Fragment] subclass.
- * Use the [TodoFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class TodoFragment : Fragment(R.layout.fragment_todoitem) {
     private val viewModel : TodoViewModel  by viewModels()
     private lateinit var adapter: TodoAdapter
     private lateinit var username: String
+    private var isFirstCgSelected = true
+    private var allTodo :List<Todo> = emptyList()
+    //搞个回调接口
     interface OnDrawerMenuClickListener{
         fun onDrawerMenuClicked ()
     }
     private var drawerMenuClickListener: OnDrawerMenuClickListener? = null
-    // TODO: Rename and change types of parameters
-    //private var param1: String? = null
-    //private var param2: String? = null
     private lateinit var binding: FragmentTodoBinding
     override fun onAttach(context: Context) {
         super.onAttach(context)
+        //判断是否实现接口
         if (context is OnDrawerMenuClickListener){
             drawerMenuClickListener = context
         }else{
@@ -69,7 +62,7 @@ class TodoFragment : Fragment(R.layout.fragment_todoitem) {
         binding.toolbar.setNavigationOnClickListener {
             drawerMenuClickListener?.onDrawerMenuClicked()
         }
-        //顶部栏右部分
+        //顶部栏菜单
         binding.toolbar.setOnMenuItemClickListener {
             when (it.itemId) {
                 R.id.add -> {
@@ -92,46 +85,87 @@ class TodoFragment : Fragment(R.layout.fragment_todoitem) {
             }
         }
         adapter = TodoAdapter(
+            //点击待办事项编辑
             onItemClick = { todo ->
                 AddTodoDialogFragment.newInstance(todo,username)
-                    .show(childFragmentManager, "AddDialogFragment")
+                    .show(parentFragmentManager, "AddDialogFragment")
             },
+            //删除
             onDeleteClick = { todo ->
-                viewModel.deleteTodo(todo)
+                AlertDialog.Builder(requireContext())
+                    .setTitle("删除待办？")
+                    .setMessage("确定要删除 '${todo.title}' 吗？")
+                    .setPositiveButton("删除") { _, _ ->
+                        viewModel.deleteTodo(todo)
+                    }
+                    .setNegativeButton("我不小心点到了", null)
+                    .show()
             }
         )
         binding.rvTodo.layoutManager =
             androidx.recyclerview.widget.LinearLayoutManager(requireContext())
         binding.rvTodo.adapter = adapter
+        val categories = listOf("全部","默认" ,"学习" ,"工作" ,"生活" ,"其他")
+        val spinnerAdapter = ArrayAdapter(
+            requireContext(),
+            android.R.layout.simple_spinner_item,
+            categories
+        ).apply {
+            setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        }
+        binding.spCategory.adapter = spinnerAdapter
+        //实现接口，设置监听器
+        binding.spCategory.onItemSelectedListener= object: AdapterView.OnItemSelectedListener{
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                //忽略第一次选择，不然启动时这玩意会自己弹出来
+                if (isFirstCgSelected) {
+                    isFirstCgSelected = false
+                    return
+                }
+                val selectedCategory = categories[position]
+                categoryFilter(selectedCategory)
+            }
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+                // 不选就当“全部”
+                categoryFilter("全部")
+            }
+        }
+        //观察 LiveData，自动更新界面
         viewModel.getTodoList(username).observe(viewLifecycleOwner) { list ->
+            allTodo =list
             adapter.submitList(list)
         }
+        //悬浮按钮
         binding.fabAddTodo.setOnClickListener {
             AddTodoDialogFragment.newInstance(null,username).show(
                 parentFragmentManager,
                 "add_todo"
             )
         }
+    }
+    private fun categoryFilter(category: String) {
+        val filtered = when (category) {
+            "全部" -> allTodo
+            else -> allTodo.filter { it.category == category }
+        }
 
+        // 如果筛选结果为空，展示提示
+        if (filtered.isEmpty()) {
+            Toast.makeText(requireContext(), "没有找到符合条件的待办事项", Toast.LENGTH_SHORT).show()
+        }
 
+        // 更新 adapter
+        adapter.submitList(filtered)
     }
 
 
 
-
-
-
-
     companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         *
-         *
-         * @return A new instance of fragment TodoFragment.
-         */
-        // TODO: Rename and change types and number of parameters
         private const val ARG_PARAM1 = "username"
         @JvmStatic
         fun newInstance(username: String) =

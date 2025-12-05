@@ -33,7 +33,7 @@ class TodoAdapter (
     )
     class TodoViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         //val cardTodo :com.google.android.material.card.MaterialCardView= itemView.findViewById(R.id.cardTodo)
-        val img: android.widget.ImageView = itemView.findViewById(R.id.img)
+        val img: ImageView = itemView.findViewById(R.id.img)
         val tvTitle: TextView = itemView.findViewById(R.id.tvTitle)
         val tvDescription: TextView = itemView.findViewById(R.id.tvDescription)
         val tvDueTime: TextView = itemView.findViewById(R.id.tvDueTime)
@@ -59,7 +59,6 @@ class TodoAdapter (
         val item = getItem(position)
         holder.tvTitle.text = item.title
         holder.tvDescription.text = item.description ?: ""
-
         val date = Date(item.dueDay)
         val format = SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault())
         holder.tvDueTime.text = "截止：${format.format(date)}"

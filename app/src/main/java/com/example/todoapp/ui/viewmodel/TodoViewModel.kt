@@ -14,14 +14,15 @@ import kotlinx.coroutines.launch
 class TodoViewModel(application: Application): AndroidViewModel(application) {
     private val todoDao = TodoDatabase.getInstance(application).todoDao()
     //val todoList: LiveData<List<Todo>> = todoDao.getAllTodos().asLiveData()
+    //获取并观察某用户待办事项列表
     fun getTodoList(username: String): LiveData<List<Todo>> =
              todoDao.getTodoByUser(username).asLiveData()
     fun addTodo(todo: Todo){
         viewModelScope.launch {
             val id = todoDao.insert(todo)
-            val inserted = todo.copy(id = id)
+            val inserted = todo.copy(id = id)//回填
             //Log.d("MainActivity", "Back button pressed")
-            scheduleReminder(getApplication(), inserted)
+            scheduleReminder(getApplication(), inserted)//设置闹钟
         }
     }
     fun updateTodo(todo: Todo) {
@@ -34,7 +35,7 @@ class TodoViewModel(application: Application): AndroidViewModel(application) {
     fun deleteTodo(todo: Todo) {
         viewModelScope.launch {
             todoDao.delete(todo)
-            cancelReminder(getApplication(),todo)
+            cancelReminder(getApplication(),todo)// 删除闹钟
         }
     }
 
