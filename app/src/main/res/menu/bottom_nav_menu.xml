@@ -4,14 +4,15 @@
         android:id="@+id/navigation_todo"
         android:icon="@mipmap/ic_todo"
         android:title="待办" />
+
     <item
-        android:id="@+id/navigation_sandglass"
+        android:id="@+id/navigation_focus"
         android:icon="@mipmap/ic_sandglass"
-        android:title="计时"/>
+        android:title="专注" />
     <item
-        android:id="@+id/navigation_application"
+        android:id="@+id/navigation_record"
         android:icon="@mipmap/ic_application"
-        android:title="应用" />
+        android:title="统计"/>
     <item
         android:id="@+id/navigation_profile"
         android:icon="@mipmap/ic_profile"

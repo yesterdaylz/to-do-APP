@@ -17,9 +17,9 @@ import androidx.core.view.GravityCompat
 import androidx.fragment.app.Fragment
 import com.example.todoapp.R
 import com.example.todoapp.databinding.ActivityMainBinding
-import com.example.todoapp.ui.fragment.ApplicationFragment
-import com.example.todoapp.ui.fragment.ClockFragment
+import com.example.todoapp.ui.fragment.FocusFragment
 import com.example.todoapp.ui.fragment.ProfileFragment
+import com.example.todoapp.ui.fragment.RecordFragment
 import com.example.todoapp.ui.fragment.TodoFragment
 
 class MainActivity : AppCompatActivity(), TodoFragment.OnDrawerMenuClickListener {
@@ -71,8 +71,8 @@ class MainActivity : AppCompatActivity(), TodoFragment.OnDrawerMenuClickListener
             val selectedFragment: Fragment = when (item.itemId) {
                 R.id.navigation_todo -> TodoFragment.newInstance(username)
                 R.id.navigation_profile -> ProfileFragment()
-                R.id.navigation_application -> ApplicationFragment()
-                R.id.navigation_sandglass -> ClockFragment()
+                R.id.navigation_focus -> FocusFragment.newInstance(username)
+                R.id.navigation_record -> RecordFragment()
                 else -> TodoFragment.newInstance(username)
             }
 
