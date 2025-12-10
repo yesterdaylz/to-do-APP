@@ -25,7 +25,6 @@ import java.io.File
 import java.io.FileOutputStream
 
 class ProfileFragment : Fragment() {
-    // TODO: Rename and change types of parameters
 
     private lateinit var binding: FragmentProfileBinding
     private var currentUser: User? = null

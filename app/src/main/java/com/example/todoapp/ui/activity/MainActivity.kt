@@ -72,7 +72,7 @@ class MainActivity : AppCompatActivity(), TodoFragment.OnDrawerMenuClickListener
                 R.id.navigation_todo -> TodoFragment.newInstance(username)
                 R.id.navigation_profile -> ProfileFragment()
                 R.id.navigation_focus -> FocusFragment.newInstance(username)
-                R.id.navigation_record -> RecordFragment()
+                R.id.navigation_record -> RecordFragment.newInstance(username)
                 else -> TodoFragment.newInstance(username)
             }
 
@@ -138,9 +138,7 @@ class MainActivity : AppCompatActivity(), TodoFragment.OnDrawerMenuClickListener
         grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-//        if (requestCode == REQ_POST_NOTIFICATIONS) {
-//            // 可选：根据用户是否同意做一些提示
-//        }
+
     }
 
 

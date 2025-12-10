@@ -4,7 +4,6 @@ import android.app.Dialog
 import android.content.Intent
 import android.os.Bundle
 import android.provider.Settings
-import android.view.LayoutInflater
 import android.view.View
 import android.widget.Button
 import android.widget.ImageView
@@ -17,15 +16,8 @@ import com.example.todoapp.R
 
 
 class ImportantDialogFragment : DialogFragment() {
-
-
-
-
-
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog{
-        val view = LayoutInflater.from(context)
-            .inflate(R.layout.fragment_important_dialog, null)
-
+        val view = layoutInflater.inflate(R.layout.fragment_important_dialog, null)
         val dialog = AlertDialog.Builder(requireContext())
             .setView(view)
             .create()

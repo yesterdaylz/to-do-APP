@@ -28,7 +28,7 @@ class FocusFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentFocusBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -36,7 +36,7 @@ class FocusFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupPickers()
-        setupModeSwitch()
+        setupMode()
         binding.btnStartFocus.setOnClickListener {
             startFocus()
         }
@@ -45,7 +45,7 @@ class FocusFragment : Fragment() {
         binding.pickerMinutes.apply {
             minValue = 1
             maxValue = 300
-            value = 25
+            value = 25///，默认值
         }
         binding.pickerPomodoroCount.apply {
             minValue = 1
@@ -59,7 +59,7 @@ class FocusFragment : Fragment() {
         }
         binding.layoutPomodoroSet.visibility = View.GONE
     }
-    private fun setupModeSwitch(){
+    private fun setupMode(){
         binding.rgMode.setOnCheckedChangeListener { _, checkedId ->
             binding.layoutPomodoroSet.visibility = if (checkedId == R.id.rbPomodoro) {
                 View.VISIBLE
@@ -67,8 +67,7 @@ class FocusFragment : Fragment() {
                 View.GONE
             }
         }
-        // 默认选中 Pomodoro（可选）
-        //binding.rbPomodoro.isChecked = true
+        binding.rbStopwatch.isChecked = true
     }
     private fun startFocus(){
         val mode = when (binding.rgMode.checkedRadioButtonId) {
@@ -94,16 +93,13 @@ class FocusFragment : Fragment() {
             putExtra("username", username)
         }
         startActivity(intent)
-
-
     }
-
     companion object {
-
         @JvmStatic
         fun newInstance(username: String) =
             FocusFragment().apply {
                 arguments = Bundle().apply {
+                    putString(ARG_USERNAME, username)
                 }
             }
     }

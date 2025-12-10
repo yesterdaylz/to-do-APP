@@ -1,59 +1,141 @@
 package com.example.todoapp.ui.fragment
 
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import com.example.todoapp.R
+import androidx.lifecycle.lifecycleScope
+import com.example.todoapp.data.database.TodoDatabase
+import com.example.todoapp.data.entity.TimeRecord
+import com.example.todoapp.databinding.FragmentRecordBinding
+import com.github.mikephil.charting.components.XAxis
+import com.github.mikephil.charting.data.BarData
+import com.github.mikephil.charting.data.BarDataSet
+import com.github.mikephil.charting.data.BarEntry
+import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Date
+import java.util.Locale
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [RecordFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
+private const val ARG_USERNAME = "arg_username"
 class RecordFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
-
+    private var _binding: FragmentRecordBinding? = null
+    private var username:String = ""
+    private val binding get() = _binding!!
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
+            username = it.getString(ARG_USERNAME, "")
+        }
+    }
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        _binding = FragmentRecordBinding.inflate(inflater, container, false)
+        setupChart()
+        loadData()
+        return binding.root
+    }
+    //配置表格
+    private fun setupChart() {
+        with(binding.barChart) {
+            description.isEnabled = false
+            axisRight.isEnabled = false
+            xAxis.position = XAxis.XAxisPosition.BOTTOM
+            //xAxis.granularity = 1f
+            axisLeft.axisMinimum = 0f
+            legend.isEnabled = true
+            setScaleEnabled(false)  // 禁用缩放
+            setFitBars(true)
+            xAxis.setDrawGridLines(false) // 隐藏X轴网格线
+            axisLeft.setDrawGridLines(true) // 显示Y轴网格线
+            axisLeft.setDrawAxisLine(true)
+            //setViewPortOffsets(80f, 80f, 10f, 50f)
+        }
+    }
+    //加载数据
+    private fun loadData() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            val db = withContext(Dispatchers.IO) {
+                TodoDatabase.getInstance(requireContext())
+            }
+            db.timeRecordDAO().getAllRecord(username).collectLatest { list ->
+                updateTodayData(list)
+                updateChart(list)
+            }
         }
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_record, container, false)
+    private fun updateTodayData(list: List<TimeRecord>) {
+        val today = Calendar.getInstance()
+        //当天凌晨00:00:00.000的时间点
+        today.set(Calendar.HOUR_OF_DAY, 0)
+        today.set(Calendar.MINUTE, 0)
+        today.set(Calendar.SECOND, 0)
+        today.set(Calendar.MILLISECOND, 0)
+        val startOfToday = today.timeInMillis
+        val endOfToday = startOfToday + 24 * 60 * 60 * 1000L
+        val todayDuration = list.filter {
+            it.startTime in startOfToday until endOfToday
+        }
+        val count = todayDuration.size
+        val minutes = todayDuration.sumOf { it.duration }
+        binding.tvTodayInfo.text = "今天专注：$count 次，$minutes 分钟"
+    }
+    private fun updateChart(list: List<TimeRecord>) {
+        // 最近 7 天
+        val calendar = Calendar.getInstance()
+        calendar.set(Calendar.HOUR_OF_DAY, 0)
+        calendar.set(Calendar.MINUTE, 0)
+        calendar.set(Calendar.SECOND, 0)
+        calendar.set(Calendar.MILLISECOND, 0)
+        val dayMills = 24 * 60 * 60 * 1000L
+        val dateFormat = SimpleDateFormat("MM-dd", Locale.getDefault())
+        val labels = mutableListOf<String>()
+        val entries = mutableListOf<BarEntry>()
+
+        // 7天前 -> 今天
+        calendar.timeInMillis -=  6 * dayMills
+        for (i in 0 until 7) {
+            val dayStart = calendar.timeInMillis
+            val dayEnd = dayStart + dayMills
+            val dayDuration = list.filter {
+                it.startTime in dayStart until dayEnd
+            }
+            val minutes = dayDuration.sumOf { it.duration }
+            labels.add(dateFormat.format(Date(dayStart)))
+            entries.add(BarEntry(i.toFloat(), minutes.toFloat()))
+            calendar.timeInMillis +=  dayMills
+        }
+        val dataSet = BarDataSet(entries, "最近7天专注时长(分钟)")
+        dataSet.color = Color.parseColor("#4CAF50")
+        val barData = BarData(dataSet)
+        barData.barWidth = 0.6f
+        binding.barChart.data = barData
+        // x 轴标签
+        binding.barChart.xAxis.valueFormatter = IndexAxisValueFormatter(labels)
+        binding.barChart.xAxis.labelCount = labels.size
+        binding.barChart.animateXY(1000,1000)
+        //binding.barChart.xAxis.setAvoidFirstLastClipping(true) // 避免首尾标签被裁剪
+        //刷新图表显示
+        binding.barChart.invalidate()
     }
 
     companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment RecordFragment.
-         */
-        // TODO: Rename and change types and number of parameters
         @JvmStatic
-        fun newInstance(param1: String, param2: String) =
+        fun newInstance(username: String) =
             RecordFragment().apply {
                 arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+                    putString(ARG_USERNAME, username)
                 }
             }
     }
