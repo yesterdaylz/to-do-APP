@@ -6,11 +6,14 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.todoapp.data.database.TodoDatabase
 import com.example.todoapp.data.entity.TimeRecord
+import com.example.todoapp.logic.motto.ApiClient
+import com.example.todoapp.logic.motto.Quote
 import com.example.todoapp.logic.timer.TimerConfig
 import com.example.todoapp.logic.timer.TimerMode
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 
 class FocusTimerViewModel(
@@ -18,6 +21,9 @@ class FocusTimerViewModel(
     private val username: String,
     private val database: TodoDatabase
 ) : ViewModel() {
+    // 名言 LiveData
+    private val _quoteLiveData = MutableLiveData<String>()
+    val quoteLiveData: LiveData<String> = _quoteLiveData
     // LiveData
     private val _timeLiveData = MutableLiveData<String>()
     val timeLiveData: LiveData<String> = _timeLiveData
@@ -33,6 +39,7 @@ class FocusTimerViewModel(
     private var stopwatchJob: Job? = null
     private var countdownJob: Job? = null
     private var breakJob: Job? = null
+    private var quoteJob: Job? = null
     private var inBreak: Boolean = false
     private var currentPomodoro: Int = 1
     private var totalWorkMinutes: Int = 0
@@ -61,6 +68,16 @@ class FocusTimerViewModel(
         countdownJob?.cancel()
         breakJob?.cancel()
         isRunning = false
+    }
+    fun startQuoteLoop() {
+        if (quoteJob != null) return
+        quoteJob = viewModelScope.launch(Dispatchers.IO) {
+            getOneQuote()
+            while (isActive) {
+                delay(60_000L)
+                getOneQuote()
+            }
+        }
     }
     private fun updateUi() {
         when (config.mode) {
@@ -186,11 +203,26 @@ class FocusTimerViewModel(
         val s = totalSeconds % 60
         return String.format("%02d:%02d", m, s)
     }
-
+    private suspend fun getOneQuote() {
+        try {
+                val category = listOf("i", "d").random()
+                val resp: Quote = ApiClient.quoteApi.getQuote(listOf(category))
+                val author = when {
+                !resp.fromWho.isNullOrBlank() -> resp.fromWho//优先作者
+                !resp.from.isNullOrBlank() -> resp.from
+                else -> "佚名"}
+            val text = "「${resp.quote}」—— $author"
+            _quoteLiveData.postValue(text)
+        } catch (e: Exception) {
+            e.printStackTrace()
+            _quoteLiveData.postValue("名言加载失败")
+        }
+    }
     override fun onCleared() {
         super.onCleared()
         stopwatchJob?.cancel()
         countdownJob?.cancel()
         breakJob?.cancel()
+        quoteJob?.cancel()
     }
 }

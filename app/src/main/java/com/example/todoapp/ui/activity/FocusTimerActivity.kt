@@ -3,20 +3,19 @@ package com.example.todoapp.ui.activity
 import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.activity.OnBackPressedCallback
-import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
 import com.example.todoapp.data.database.TodoDatabase
 import com.example.todoapp.databinding.ActivityFocusTimerBinding
 import com.example.todoapp.logic.timer.TimerConfig
 import com.example.todoapp.ui.viewmodel.FocusTimerViewModel
 import com.example.todoapp.ui.viewmodel.FocusTimerViewModelFactory
+
 class FocusTimerActivity : AppCompatActivity() {
     private lateinit var config: TimerConfig
     private lateinit var username: String
-    private val viewModel: FocusTimerViewModel by viewModels {
-        FocusTimerViewModelFactory(config, username, TodoDatabase.getInstance(this))
-    }
+    private lateinit var viewModel: FocusTimerViewModel
     private lateinit var binding: ActivityFocusTimerBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -32,8 +31,12 @@ class FocusTimerActivity : AppCompatActivity() {
             intent.getParcelableExtra("config") as? TimerConfig
         }!!
          username = intent.getStringExtra("username") ?: ""
+        val db = TodoDatabase.getInstance(this)
+        val factory = FocusTimerViewModelFactory(config, username, db)
+        viewModel = ViewModelProvider(this, factory)[FocusTimerViewModel::class.java]
         observeViewModel()
         setupViews()
+        viewModel.startQuoteLoop()
         setupBackPressed()
     }
     private fun observeViewModel() {
@@ -42,6 +45,9 @@ class FocusTimerActivity : AppCompatActivity() {
         }
         viewModel.pomodoroInfoLiveData.observe(this) { info ->
             binding.tvPomodoroInfo.text = info
+        }
+        viewModel.quoteLiveData.observe(this) { quote ->
+            binding.tvDailyQuote.text = quote
         }
     }
 

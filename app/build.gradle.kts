@@ -62,6 +62,10 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.9.4")
     implementation("androidx.work:work-runtime-ktx:2.11.0")
     implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
+    implementation("com.squareup.retrofit2:retrofit:2.12.0")
+    implementation("com.squareup.retrofit2:converter-gson:2.12.0")
+    implementation("com.squareup.okhttp3:okhttp:4.12.0")
+    implementation("com.squareup.okhttp3:logging-interceptor:4.12.0")
 
     //  Room 的 Kotlin 扩展和协程支持
     implementation(libs.androidx.room.ktx)
