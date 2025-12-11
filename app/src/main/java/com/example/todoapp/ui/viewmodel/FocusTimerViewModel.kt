@@ -29,14 +29,14 @@ class FocusTimerViewModel(
     val timeLiveData: LiveData<String> = _timeLiveData
     private val _pomodoroInfoLiveData = MutableLiveData<String>()
     val pomodoroInfoLiveData: LiveData<String> = _pomodoroInfoLiveData
-    private val _isFocusLiveData = MutableLiveData<Boolean>(false)
-    val isFocusRunningLiveData: LiveData<Boolean> = _isFocusLiveData
+    private val _isFocusLiveData = MutableLiveData(false)
+   // val isFocusRunningLiveData: LiveData<Boolean> = _isFocusLiveData
     private val _timerFinished = MutableLiveData<Unit>()
     val timerFinishedEvent: LiveData<Unit> = _timerFinished
-    // ✅ 是否开启背景音乐（默认开启）
-    private val _isBgmEnabledLiveData = MutableLiveData<Boolean>(true)
+    // 是否开启背景音乐（默认开启）
+    private val _isBgmEnabledLiveData = MutableLiveData(true)
     val isBgmEnabledLiveData: LiveData<Boolean> = _isBgmEnabledLiveData
-
+    val timerSoundState = MutableLiveData<String>()
 
 
     // 状态
@@ -44,7 +44,7 @@ class FocusTimerViewModel(
         private set
     var durationEnded: Boolean = false
         private set
-    var isBreaking:Boolean =false
+    //var isBreaking:Boolean =false
     // 计时状态
     private var durationStartTime: Long = 0L
     private var stopwatchJob: Job? = null
@@ -73,6 +73,12 @@ class FocusTimerViewModel(
             }
         }
         isRunning = true
+        _isFocusLiveData.value = true
+        if (_isBgmEnabledLiveData.value == true) {
+            timerSoundState.postValue("PLAY")
+        } else {
+            timerSoundState.postValue("STOP")
+        }
     }
     fun pauseTimer() {
         stopwatchJob?.cancel()
@@ -80,6 +86,7 @@ class FocusTimerViewModel(
         breakJob?.cancel()
         isRunning = false
         _isFocusLiveData.value = false
+        timerSoundState.postValue("STOP")
     }
     fun startQuoteLoop() {
         if (quoteJob != null) return
@@ -132,6 +139,9 @@ class FocusTimerViewModel(
             _isFocusLiveData.value = false
             _timerFinished.value = Unit
             saveDuration(config.minutes)
+            timerSoundState.postValue("STOP")
+
+            saveDuration(config.minutes)
         }
     }
     //倒计时/番茄钟
@@ -154,6 +164,9 @@ class FocusTimerViewModel(
                     _isFocusLiveData.value = false
                     _timerFinished.value = Unit
                     saveDuration(config.minutes)
+                    timerSoundState.postValue("STOP")
+
+                    saveDuration(config.minutes)
                 }
                 TimerMode.POMODORO -> onPomodoroFinished()
                 else -> {}
@@ -170,6 +183,7 @@ class FocusTimerViewModel(
             _isFocusLiveData.value = false
             _timerFinished.value = Unit
             saveDuration(totalWorkMinutes)
+            timerSoundState.postValue("STOP")
         } else {
             // 进入休息
             inBreak = true
@@ -186,6 +200,7 @@ class FocusTimerViewModel(
         breakJob = viewModelScope.launch {
             var remainingSeconds = breakMinutes * 60
             _isFocusLiveData.value = false
+            timerSoundState.postValue("STOP")
             while (remainingSeconds > 0) {
                 delay(1000)
                 remainingSeconds--
@@ -242,7 +257,14 @@ class FocusTimerViewModel(
     }
     fun setBgmEnabled(enabled: Boolean) {
         _isBgmEnabledLiveData.value = enabled
+
+        if (enabled) {
+            if (isRunning) timerSoundState.postValue("PLAY")
+        } else {
+            timerSoundState.postValue("STOP")
+        }
     }
+
     override fun onCleared() {
         super.onCleared()
         stopwatchJob?.cancel()

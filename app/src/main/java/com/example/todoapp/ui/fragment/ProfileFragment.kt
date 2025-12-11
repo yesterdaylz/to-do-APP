@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.edit
+import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.example.todoapp.R
@@ -91,7 +92,14 @@ class ProfileFragment : Fragment() {
             Toast.makeText(requireContext(), "设置 - 敬请期待", Toast.LENGTH_SHORT).show()
         }
         binding.itemHelp.setOnClickListener {
-            Toast.makeText(requireContext(), "帮助中心 - 敬请期待", Toast.LENGTH_SHORT).show()
+            val url = "https://yesterdaylz.github.io/"
+            val intent = Intent(Intent.ACTION_VIEW, url.toUri())
+            try {
+                startActivity(intent)
+            } catch (e: Exception) {
+                e.printStackTrace()
+                Toast.makeText(requireContext(), "无法打开网页", Toast.LENGTH_SHORT).show()
+            }
         }
         binding.btnOut.setOnClickListener {
             val prefs = requireContext().getSharedPreferences("todo_prefs", Context.MODE_PRIVATE)

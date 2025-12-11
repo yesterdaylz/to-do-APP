@@ -3,7 +3,7 @@
     <style name="Base.Theme.ToDoApp" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
-        <item name="colorPrimary">@color/Yellow</item>
+        <item name="colorPrimary">@color/lemon</item>
         <item name="android:textColor">@color/black</item>
     </style>
     <style name="RoundedDialog" parent="Theme.AppCompat.Light.Dialog.Alert">

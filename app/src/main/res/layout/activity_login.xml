@@ -79,9 +79,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- 注册按钮：在登录按钮下面，靠左 -->
 
-    <!-- 忘记密码：和“注册”在同一行，靠右 -->
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnRegister"
         style="@style/Widget.MaterialComponents.Button.TextButton"

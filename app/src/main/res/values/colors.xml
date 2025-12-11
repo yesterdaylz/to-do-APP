@@ -2,5 +2,6 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="Yellow">#E7DC80</color>
+    <color name="lemon">#E7DC80</color>
+    <color name="dialog">#FFFFFFFF</color>
 </resources>

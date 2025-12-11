@@ -12,7 +12,7 @@
         android:fitsSystemWindows="true"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/Yellow"
+        android:background="@color/lemon"
 
         app:backgroundTint="?attr/colorPrimary"
         app:layout_constraintTop_toTopOf="parent"
@@ -62,7 +62,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:fabSize="normal"
-        app:backgroundTint="#F4DD9B"/>
+        app:backgroundTint="@color/lemon"/>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

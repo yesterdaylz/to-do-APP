@@ -1,5 +1,6 @@
 package com.example.todoapp.ui.fragment
 
+import android.content.res.Configuration
 import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -47,6 +48,14 @@ class RecordFragment : Fragment() {
     }
     //配置表格
     private fun setupChart() {
+        val isDarkMode = resources.configuration.uiMode and
+                Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES
+
+        val textColor = if (isDarkMode) {
+            Color.WHITE  // 深色模式下使用白色文字
+        } else {
+            Color.BLACK  // 浅色模式下使用黑色文字
+        }
         with(binding.barChart) {
             description.isEnabled = false
             axisRight.isEnabled = false
@@ -60,6 +69,10 @@ class RecordFragment : Fragment() {
             axisLeft.setDrawGridLines(true) // 显示Y轴网格线
             axisLeft.setDrawAxisLine(true)
             //setViewPortOffsets(80f, 80f, 10f, 50f)
+            xAxis.textColor = textColor
+            axisLeft.textColor = textColor
+            legend.textColor = textColor
+            invalidate()
         }
     }
     //加载数据

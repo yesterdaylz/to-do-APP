@@ -3,6 +3,7 @@ package com.example.todoapp.ui.activity
 import android.annotation.SuppressLint
 import android.media.MediaPlayer
 import android.os.Bundle
+import android.widget.CompoundButton
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -15,14 +16,16 @@ import com.example.todoapp.ui.viewmodel.FocusTimerViewModel
 import com.example.todoapp.ui.viewmodel.FocusTimerViewModelFactory
 
 class FocusTimerActivity : AppCompatActivity() {
-    private lateinit var config: TimerConfig
-    private lateinit var username: String
+
     private lateinit var viewModel: FocusTimerViewModel
     private lateinit var binding: ActivityFocusTimerBinding
+
     // 背景BGM（循环）
     private var bgmPlayer: MediaPlayer? = null
+
     // 完成提示音播放器（短音效，每次播完释放）
     private var finishPlayer: MediaPlayer? = null
+    private var musicToggleListener: CompoundButton.OnCheckedChangeListener? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,13 +33,14 @@ class FocusTimerActivity : AppCompatActivity() {
         setContentView(binding.root)
         // 初始化 ViewModel，不懂太新太旧都给我警告
         @SuppressLint("NewApi")
-         config = if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
-            intent.getParcelableExtra("config", TimerConfig::class.java)
-        } else {
-            @Suppress("DEPRECATION")
-            intent.getParcelableExtra("config") as? TimerConfig
-        }!!
-         username = intent.getStringExtra("username") ?: ""
+        val config =
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
+                intent.getParcelableExtra("config", TimerConfig::class.java)
+            } else {
+                @Suppress("DEPRECATION")
+                intent.getParcelableExtra("config") as? TimerConfig
+            }!!
+        val username = intent.getStringExtra("username") ?: ""
         val db = TodoDatabase.getInstance(this)
         val factory = FocusTimerViewModelFactory(config, username, db)
         viewModel = ViewModelProvider(this, factory)[FocusTimerViewModel::class.java]
@@ -45,22 +49,29 @@ class FocusTimerActivity : AppCompatActivity() {
         viewModel.startQuoteLoop()
         setupBackPressed()
     }
+
     private fun observeViewModel() {
-        viewModel.timeLiveData.observe(this) { time ->
-            binding.tvTime.text = time
+        viewModel.timeLiveData.observe(this) {
+            binding.tvTime.text = it
         }
-        viewModel.pomodoroInfoLiveData.observe(this) { info ->
-            binding.tvPomodoroInfo.text = info
+        viewModel.pomodoroInfoLiveData.observe(this) {
+            binding.tvPomodoroInfo.text = it
         }
-        viewModel.quoteLiveData.observe(this) { quote ->
-            binding.tvDailyQuote.text = quote
+        viewModel.quoteLiveData.observe(this) {
+            binding.tvDailyQuote.text = it
         }
-        viewModel.isFocusRunningLiveData.observe(this) { isRunning ->
-            val bgmEnabled = viewModel.isBgmEnabledLiveData.value ?: true
-            if (isRunning && bgmEnabled) {
-                startBgm()
-            } else {
-                stopBgm()
+//        viewModel.isFocusRunningLiveData.observe(this) { isRunning ->
+//            val bgmEnabled = viewModel.isBgmEnabledLiveData.value ?: true
+//            if (bgmEnabled) {
+//                if (isRunning) startBgm() else stopBgm()
+//            } else {
+//                stopBgm()
+//            }
+//        }
+        viewModel.timerSoundState.observe(this) { state ->
+            when (state) {
+                "PLAY" -> startBgm()
+                "STOP" -> stopBgm()
             }
         }
         viewModel.timerFinishedEvent.observe(this) {
@@ -68,38 +79,41 @@ class FocusTimerActivity : AppCompatActivity() {
             playFinishSound()  // 提示音照常播放
         }
         viewModel.isBgmEnabledLiveData.observe(this) { enabled ->
-            // 更新 RadioButton UI（防止旋转屏幕后状态错乱）
-            binding.rbMusicToggle.isChecked = enabled
-
-            if (!enabled) {
-                // 关掉音乐：立刻停掉 BGM
-                stopBgm()
-            } else {
-                // 如果当前处于专注计时中，则恢复播放
-                val isFocus = viewModel.isFocusRunningLiveData.value ?: false
-                if (isFocus) {
-                    startBgm()
-                }
+            if (binding.cbMusicToggle.isChecked != enabled) {
+                binding.cbMusicToggle.setOnCheckedChangeListener(null)
+                binding.cbMusicToggle.isChecked = enabled
+                binding.cbMusicToggle.setOnCheckedChangeListener(musicToggleListener)
             }
         }
 
+
+        viewModel.timerFinishedEvent.observe(this) {
+            stopBgm()
+            playFinishSound()
+        }
     }
+
 
     private fun setupViews() {
         binding.btnStartPause.setOnClickListener {
             if (viewModel.isRunning) pauseTimer() else startTimer()
         }
+
         binding.btnFinish.setOnClickListener {
             confirmExit()
         }
-        binding.rbMusicToggle.isChecked = true   // 默认开启
-        binding.rbMusicToggle.setOnCheckedChangeListener { _, isChecked ->
-            // 更新 ViewModel 状态
+
+        musicToggleListener = CompoundButton.OnCheckedChangeListener { _, isChecked ->
             viewModel.setBgmEnabled(isChecked)
         }
+
+        binding.cbMusicToggle.setOnCheckedChangeListener(musicToggleListener)
     }
+
+
     private fun setupBackPressed() {
-        onBackPressedDispatcher.addCallback(this,
+        onBackPressedDispatcher.addCallback(
+            this,
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
                     confirmExit()
@@ -111,10 +125,12 @@ class FocusTimerActivity : AppCompatActivity() {
         viewModel.startTimerOrResume()
         binding.btnStartPause.text = "暂停"
     }
+
     private fun pauseTimer() {
         viewModel.pauseTimer()
         binding.btnStartPause.text = "继续"
     }
+
     private fun confirmExit() {
         if (viewModel.durationEnded || !viewModel.isRunning) {
             finish()
@@ -127,7 +143,10 @@ class FocusTimerActivity : AppCompatActivity() {
             .setNegativeButton("继续专注", null)
             .show()
     }
+
     private fun startBgm() {
+        if (viewModel.isBgmEnabledLiveData.value != true) return
+
         if (bgmPlayer == null) {
             bgmPlayer = MediaPlayer.create(this, R.raw.focus_bgm).apply {
                 isLooping = true
@@ -138,10 +157,12 @@ class FocusTimerActivity : AppCompatActivity() {
         }
     }
 
+
     private fun stopBgm() {
         bgmPlayer?.pause()
         // bgmPlayer?.seekTo(0)
     }
+
     private fun playFinishSound() {
         // 上一次的先释放
         finishPlayer?.release()
