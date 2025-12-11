@@ -66,12 +66,12 @@ class TodoFragment : Fragment(R.layout.fragment_todoitem) {
         binding.toolbar.setOnMenuItemClickListener {
             when (it.itemId) {
                 R.id.add -> {
-                    Toast.makeText(requireContext(), "打卡", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), "打卡-敬请期待", Toast.LENGTH_SHORT).show()
                     true
                 }
 
                 R.id.more -> {
-                    Toast.makeText(requireContext(), "Settings", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), "设置-敬请期待", Toast.LENGTH_SHORT).show()
                     true
                 }
                 R.id.important -> {
@@ -106,6 +106,7 @@ class TodoFragment : Fragment(R.layout.fragment_todoitem) {
             androidx.recyclerview.widget.LinearLayoutManager(requireContext())
         binding.rvTodo.adapter = adapter
         val categories = listOf("全部","默认" ,"学习" ,"工作" ,"生活" ,"其他")
+        binding.spCategory.dropDownWidth = 150 * resources.displayMetrics.density.toInt()
         val spinnerAdapter = ArrayAdapter(
             requireContext(),
             android.R.layout.simple_spinner_item,

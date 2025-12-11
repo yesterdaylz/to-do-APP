@@ -15,7 +15,7 @@ interface TodoDao {
     @Query("SELECT * FROM todo WHERE username = :username ORDER by pin DESC ,dueDay ASC")
     fun getTodoByUser(username: String): Flow<List<Todo>>
 
-    @Insert(onConflict = OnConflictStrategy.Companion.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(todo: Todo): Long
 
     @Update

@@ -118,7 +118,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="设置"
+                    android:text="修改密码"
                     android:textSize="16sp" />
             </LinearLayout>
 
@@ -134,7 +134,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="帮助中心"
+                    android:text="关于"
                     android:textSize="16sp" />
             </LinearLayout>
 

@@ -29,11 +29,22 @@ class FocusTimerViewModel(
     val timeLiveData: LiveData<String> = _timeLiveData
     private val _pomodoroInfoLiveData = MutableLiveData<String>()
     val pomodoroInfoLiveData: LiveData<String> = _pomodoroInfoLiveData
+    private val _isFocusLiveData = MutableLiveData<Boolean>(false)
+    val isFocusRunningLiveData: LiveData<Boolean> = _isFocusLiveData
+    private val _timerFinished = MutableLiveData<Unit>()
+    val timerFinishedEvent: LiveData<Unit> = _timerFinished
+    // ✅ 是否开启背景音乐（默认开启）
+    private val _isBgmEnabledLiveData = MutableLiveData<Boolean>(true)
+    val isBgmEnabledLiveData: LiveData<Boolean> = _isBgmEnabledLiveData
+
+
+
     // 状态
     var isRunning: Boolean = false
         private set
     var durationEnded: Boolean = false
         private set
+    var isBreaking:Boolean =false
     // 计时状态
     private var durationStartTime: Long = 0L
     private var stopwatchJob: Job? = null
@@ -68,6 +79,7 @@ class FocusTimerViewModel(
         countdownJob?.cancel()
         breakJob?.cancel()
         isRunning = false
+        _isFocusLiveData.value = false
     }
     fun startQuoteLoop() {
         if (quoteJob != null) return
@@ -108,6 +120,7 @@ class FocusTimerViewModel(
         stopwatchJob = viewModelScope.launch {
             var passedSeconds = 0
             val targetSeconds = config.minutes * 60
+            _isFocusLiveData.value = true
             while (passedSeconds < targetSeconds) {
                 delay(1000)
                 passedSeconds++
@@ -116,6 +129,8 @@ class FocusTimerViewModel(
             // 完成一次专注
             isRunning = false
             durationEnded = true
+            _isFocusLiveData.value = false
+            _timerFinished.value = Unit
             saveDuration(config.minutes)
         }
     }
@@ -124,6 +139,7 @@ class FocusTimerViewModel(
         countdownJob?.cancel()
         countdownJob = viewModelScope.launch {
             var remainingSeconds = totalSeconds
+            _isFocusLiveData.value = true
             while (remainingSeconds > 0) {
                 delay(1000)
                 remainingSeconds--
@@ -135,6 +151,8 @@ class FocusTimerViewModel(
                 TimerMode.COUNTDOWN -> {
                     isRunning = false
                     durationEnded = true
+                    _isFocusLiveData.value = false
+                    _timerFinished.value = Unit
                     saveDuration(config.minutes)
                 }
                 TimerMode.POMODORO -> onPomodoroFinished()
@@ -149,10 +167,13 @@ class FocusTimerViewModel(
             // 所有番茄完成
             isRunning = false
             durationEnded = true
+            _isFocusLiveData.value = false
+            _timerFinished.value = Unit
             saveDuration(totalWorkMinutes)
         } else {
             // 进入休息
             inBreak = true
+            _isFocusLiveData.value = false
             updatePomodoroInfo()
             val isLongBreak = (currentPomodoro % 4 == 0)
             val breakMinutes =
@@ -164,6 +185,7 @@ class FocusTimerViewModel(
         breakJob?.cancel()
         breakJob = viewModelScope.launch {
             var remainingSeconds = breakMinutes * 60
+            _isFocusLiveData.value = false
             while (remainingSeconds > 0) {
                 delay(1000)
                 remainingSeconds--
@@ -217,6 +239,9 @@ class FocusTimerViewModel(
             e.printStackTrace()
             _quoteLiveData.postValue("名言加载失败")
         }
+    }
+    fun setBgmEnabled(enabled: Boolean) {
+        _isBgmEnabledLiveData.value = enabled
     }
     override fun onCleared() {
         super.onCleared()

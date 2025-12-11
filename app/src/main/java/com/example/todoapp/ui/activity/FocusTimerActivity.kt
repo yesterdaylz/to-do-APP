@@ -1,11 +1,13 @@
 package com.example.todoapp.ui.activity
 
 import android.annotation.SuppressLint
+import android.media.MediaPlayer
 import android.os.Bundle
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
+import com.example.todoapp.R
 import com.example.todoapp.data.database.TodoDatabase
 import com.example.todoapp.databinding.ActivityFocusTimerBinding
 import com.example.todoapp.logic.timer.TimerConfig
@@ -17,6 +19,10 @@ class FocusTimerActivity : AppCompatActivity() {
     private lateinit var username: String
     private lateinit var viewModel: FocusTimerViewModel
     private lateinit var binding: ActivityFocusTimerBinding
+    // 背景BGM（循环）
+    private var bgmPlayer: MediaPlayer? = null
+    // 完成提示音播放器（短音效，每次播完释放）
+    private var finishPlayer: MediaPlayer? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,6 +55,34 @@ class FocusTimerActivity : AppCompatActivity() {
         viewModel.quoteLiveData.observe(this) { quote ->
             binding.tvDailyQuote.text = quote
         }
+        viewModel.isFocusRunningLiveData.observe(this) { isRunning ->
+            val bgmEnabled = viewModel.isBgmEnabledLiveData.value ?: true
+            if (isRunning && bgmEnabled) {
+                startBgm()
+            } else {
+                stopBgm()
+            }
+        }
+        viewModel.timerFinishedEvent.observe(this) {
+            stopBgm()          // 确保 BGM 停掉
+            playFinishSound()  // 提示音照常播放
+        }
+        viewModel.isBgmEnabledLiveData.observe(this) { enabled ->
+            // 更新 RadioButton UI（防止旋转屏幕后状态错乱）
+            binding.rbMusicToggle.isChecked = enabled
+
+            if (!enabled) {
+                // 关掉音乐：立刻停掉 BGM
+                stopBgm()
+            } else {
+                // 如果当前处于专注计时中，则恢复播放
+                val isFocus = viewModel.isFocusRunningLiveData.value ?: false
+                if (isFocus) {
+                    startBgm()
+                }
+            }
+        }
+
     }
 
     private fun setupViews() {
@@ -57,6 +91,11 @@ class FocusTimerActivity : AppCompatActivity() {
         }
         binding.btnFinish.setOnClickListener {
             confirmExit()
+        }
+        binding.rbMusicToggle.isChecked = true   // 默认开启
+        binding.rbMusicToggle.setOnCheckedChangeListener { _, isChecked ->
+            // 更新 ViewModel 状态
+            viewModel.setBgmEnabled(isChecked)
         }
     }
     private fun setupBackPressed() {
@@ -87,6 +126,42 @@ class FocusTimerActivity : AppCompatActivity() {
             .setPositiveButton("退出") { _, _ -> finish() }
             .setNegativeButton("继续专注", null)
             .show()
+    }
+    private fun startBgm() {
+        if (bgmPlayer == null) {
+            bgmPlayer = MediaPlayer.create(this, R.raw.focus_bgm).apply {
+                isLooping = true
+            }
+        }
+        if (bgmPlayer?.isPlaying != true) {
+            bgmPlayer?.start()
+        }
+    }
+
+    private fun stopBgm() {
+        bgmPlayer?.pause()
+        // bgmPlayer?.seekTo(0)
+    }
+    private fun playFinishSound() {
+        // 上一次的先释放
+        finishPlayer?.release()
+        finishPlayer = MediaPlayer.create(this, R.raw.timer_finish)
+        finishPlayer?.setOnCompletionListener { mp ->
+            mp.release()
+            if (finishPlayer == mp) {
+                finishPlayer = null
+            }
+        }
+        finishPlayer?.start()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        // 释放资源
+        bgmPlayer?.release()
+        bgmPlayer = null
+        finishPlayer?.release()
+        finishPlayer = null
     }
 }
 
