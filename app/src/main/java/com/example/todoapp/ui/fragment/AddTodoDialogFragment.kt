@@ -1,9 +1,7 @@
 package com.example.todoapp.ui.fragment
 
 import android.app.AlertDialog
-import android.app.DatePickerDialog
 import android.app.Dialog
-import android.app.TimePickerDialog
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
@@ -12,6 +10,9 @@ import androidx.fragment.app.activityViewModels
 import com.example.todoapp.R
 import com.example.todoapp.data.entity.Todo
 import com.example.todoapp.ui.viewmodel.TodoViewModel
+import com.google.android.material.datepicker.MaterialDatePicker
+import com.google.android.material.timepicker.MaterialTimePicker
+import com.google.android.material.timepicker.TimeFormat
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
@@ -162,40 +163,45 @@ class AddTodoDialogFragment: DialogFragment() {
         initialCalendar: Calendar,
         onTimeSelected: (Long, String) -> Unit
     ) {
-        val context = requireContext()
 
-        // 先选日期
-        DatePickerDialog(
-            context,
-            { _, year, month, dayOfMonth ->
-                initialCalendar.set(Calendar.YEAR, year)
-                initialCalendar.set(Calendar.MONTH, month)
-                initialCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth)
+        val datePicker = MaterialDatePicker.Builder.datePicker()
+            .setTitleText("选择日期")
+            .setSelection(initialCalendar.timeInMillis)
+            .setTheme(R.style.MyDatePickerTheme)
+            .build()
 
-                // 再选时间
-                TimePickerDialog(
-                    context,
-                    { _, hourOfDay, minute ->
-                        initialCalendar.set(Calendar.HOUR_OF_DAY, hourOfDay)
-                        initialCalendar.set(Calendar.MINUTE, minute)
-                        initialCalendar.set(Calendar.SECOND, 0)
-                        initialCalendar.set(Calendar.MILLISECOND, 0)
+        datePicker.addOnPositiveButtonClickListener { utcMidnightMillis ->
+            val pickedDateCal = Calendar.getInstance().apply { timeInMillis = utcMidnightMillis }
+            initialCalendar.set(Calendar.YEAR, pickedDateCal.get(Calendar.YEAR))
+            initialCalendar.set(Calendar.MONTH, pickedDateCal.get(Calendar.MONTH))
+            initialCalendar.set(Calendar.DAY_OF_MONTH, pickedDateCal.get(Calendar.DAY_OF_MONTH))
 
-                        val timeMillis = initialCalendar.timeInMillis
-                        val format = SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault())
-                        val formatted = format.format(Date(timeMillis))
 
-                        onTimeSelected(timeMillis, formatted)
-                    },
-                    initialCalendar.get(Calendar.HOUR_OF_DAY),
-                    initialCalendar.get(Calendar.MINUTE),
-                    true  // 24小时制
-                ).show()
-            },
-            initialCalendar.get(Calendar.YEAR),
-            initialCalendar.get(Calendar.MONTH),
-            initialCalendar.get(Calendar.DAY_OF_MONTH)
-        ).show()
+            val timePicker = MaterialTimePicker.Builder()
+                .setTitleText("选择时间")
+                .setTimeFormat(TimeFormat.CLOCK_24H)
+                .setHour(initialCalendar.get(Calendar.HOUR_OF_DAY))
+                .setMinute(initialCalendar.get(Calendar.MINUTE))
+                .setTheme(R.style.MyTimePickerTheme)
+                .build()
+
+            timePicker.addOnPositiveButtonClickListener {
+                initialCalendar.set(Calendar.HOUR_OF_DAY, timePicker.hour)
+                initialCalendar.set(Calendar.MINUTE, timePicker.minute)
+                initialCalendar.set(Calendar.SECOND, 0)
+                initialCalendar.set(Calendar.MILLISECOND, 0)
+
+                val timeMillis = initialCalendar.timeInMillis
+                val formatted = SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault())
+                    .format(Date(timeMillis))
+
+                onTimeSelected(timeMillis, formatted)
+            }
+
+            timePicker.show(childFragmentManager, "TIME_PICKER")
+        }
+
+        datePicker.show(childFragmentManager, "DATE_PICKER")
     }
 
 

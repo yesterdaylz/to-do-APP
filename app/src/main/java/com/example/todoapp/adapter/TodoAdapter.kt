@@ -20,10 +20,10 @@ class TodoAdapter (
     private val onDeleteClick: (Todo) -> Unit
 ): ListAdapter<Todo, TodoAdapter.TodoViewHolder>(DiffCallback()){
     private val backgrounds = listOf(
-        R.drawable.bg_todo_1,
+        R.drawable.bg_todo_7,
         R.drawable.bg_todo_2,
         R.drawable.bg_todo_3,
-        R.drawable.bg_todo_4,
+        R.drawable.bg_todo_10,
         R.drawable.bg_todo_5,
         R.drawable.bg_todo_6,
         R.drawable.bg_todo_7,

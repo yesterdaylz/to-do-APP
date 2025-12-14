@@ -4,4 +4,7 @@
     <color name="white">#FFFFFFFF</color>
     <color name="lemon">#E7DC80</color>
     <color name="dialog">#FFFFFFFF</color>
+    <color name="picker_btn">#FF000000</color>
+
+
 </resources>

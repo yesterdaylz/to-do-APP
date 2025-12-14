@@ -16,6 +16,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.content.edit
 import androidx.core.view.GravityCompat
 import androidx.fragment.app.Fragment
 import com.example.todoapp.R
@@ -72,7 +73,9 @@ class MainActivity : AppCompatActivity(), TodoFragment.OnDrawerMenuClickListener
         }
         val lastTabId = prefs.getInt("last_tab_id", R.id.navigation_todo)
         binding.bottomNavigation.setOnItemSelectedListener {item ->
-            prefs.edit().putInt("last_tab_id", item.itemId).apply()
+            //prefs.edit().putInt("last_tab_id", item.itemId).apply()
+            prefs.edit { putInt("last_tab_id", item.itemId) }
+
             supportFragmentManager.popBackStack(
                 null,
                 androidx.fragment.app.FragmentManager.POP_BACK_STACK_INCLUSIVE

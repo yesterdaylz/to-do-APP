@@ -13,20 +13,17 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/lemon"
-
-        app:backgroundTint="?attr/colorPrimary"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:theme="@style/ThemeOverlay.Material3.ActionBar">
+        app:layout_constraintEnd_toEndOf="parent">
 
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             app:title="待办"
-            app:titleTextColor="@android:color/black"
-
+            app:titleTextColor="@color/black"
+            app:navigationIconTint="@color/black"
             app:menu="@menu/todo_menu"
             app:layout_scrollFlags="scroll|enterAlways" />
 
