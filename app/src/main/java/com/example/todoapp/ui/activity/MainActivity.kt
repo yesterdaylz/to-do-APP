@@ -7,7 +7,10 @@ import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.os.SystemClock
 import android.widget.ImageView
+import android.widget.Toast
+import androidx.activity.addCallback
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
@@ -22,7 +25,9 @@ import com.example.todoapp.ui.fragment.ProfileFragment
 import com.example.todoapp.ui.fragment.RecordFragment
 import com.example.todoapp.ui.fragment.TodoFragment
 
+
 class MainActivity : AppCompatActivity(), TodoFragment.OnDrawerMenuClickListener {
+    private var lastBackPressedTime = 0L
     companion object {
         private const val REQ_POST_NOTIFICATIONS = 1001
     }
@@ -68,6 +73,10 @@ class MainActivity : AppCompatActivity(), TodoFragment.OnDrawerMenuClickListener
         val lastTabId = prefs.getInt("last_tab_id", R.id.navigation_todo)
         binding.bottomNavigation.setOnItemSelectedListener {item ->
             prefs.edit().putInt("last_tab_id", item.itemId).apply()
+            supportFragmentManager.popBackStack(
+                null,
+                androidx.fragment.app.FragmentManager.POP_BACK_STACK_INCLUSIVE
+            )//
             val selectedFragment: Fragment = when (item.itemId) {
                 R.id.navigation_todo -> TodoFragment.newInstance(username)
                 R.id.navigation_profile -> ProfileFragment()
@@ -91,7 +100,31 @@ class MainActivity : AppCompatActivity(), TodoFragment.OnDrawerMenuClickListener
 //            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
 //            insets
 //        }
+        onBackPressedDispatcher.addCallback(this) {
+            if (binding.drawerLayout.isDrawerOpen(GravityCompat.START)) {
+                binding.drawerLayout.closeDrawer(GravityCompat.START)
+                return@addCallback
+            }
+            if (supportFragmentManager.backStackEntryCount > 0) {
+                supportFragmentManager.popBackStack()
+                return@addCallback
+            }
+            if (binding.bottomNavigation.selectedItemId != R.id.navigation_todo) {
+                binding.bottomNavigation.selectedItemId = R.id.navigation_todo
+                return@addCallback
+            }
+
+            val now = SystemClock.elapsedRealtime()
+            if (now - lastBackPressedTime < 2000) {
+
+                finish()
+            } else {
+                lastBackPressedTime = now
+                Toast.makeText(this@MainActivity, "再按一次退出", Toast.LENGTH_SHORT).show()
+            }
+        }
     }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         val imageView = findViewById<ImageView>(R.id.imageView)
