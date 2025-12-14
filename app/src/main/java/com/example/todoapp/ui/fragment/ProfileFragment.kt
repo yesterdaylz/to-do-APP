@@ -18,6 +18,7 @@ import com.example.todoapp.R
 import com.example.todoapp.data.database.TodoDatabase
 import com.example.todoapp.data.entity.User
 import com.example.todoapp.databinding.FragmentProfileBinding
+import com.example.todoapp.ui.activity.ChangePasswordActivity
 import com.example.todoapp.ui.activity.LoginActivity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -89,8 +90,9 @@ class ProfileFragment : Fragment() {
         }
 
         binding.itemSettings.setOnClickListener {
-            Toast.makeText(requireContext(), "设置 - 敬请期待", Toast.LENGTH_SHORT).show()
+            startActivity(Intent(requireContext(), ChangePasswordActivity::class.java))
         }
+
         binding.itemHelp.setOnClickListener {
             val url = "https://yesterdaylz.github.io/"
             val intent = Intent(Intent.ACTION_VIEW, url.toUri())

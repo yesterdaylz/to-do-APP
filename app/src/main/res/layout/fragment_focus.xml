@@ -45,7 +45,7 @@
         android:layout_marginTop="24dp"
         app:layout_constraintTop_toBottomOf="@id/rgMode"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        >
 
         <TextView
             android:layout_width="wrap_content"
@@ -63,25 +63,25 @@
         android:id="@+id/layoutPomodoroSet"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:layout_marginTop="16dp"
         android:orientation="vertical"
         android:visibility="gone"
-        android:layout_marginTop="16dp"
-        app:layout_constraintTop_toBottomOf="@id/layoutTimeSet"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/btnStartFocus"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/btnStartFocus">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/layoutTimeSet">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center">
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="番茄个数："
-                android:textStyle="bold"/>
+                android:textStyle="bold" />
 
             <NumberPicker
                 android:id="@+id/pickerPomodoroCount"
@@ -92,15 +92,15 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center"
-            android:layout_marginTop="8dp">
+            android:layout_marginTop="8dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="短休(分钟)："
-                android:textStyle="bold"/>
+                android:textStyle="bold" />
 
             <NumberPicker
                 android:id="@+id/pickerShortBreak"
