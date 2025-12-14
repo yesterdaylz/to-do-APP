@@ -70,10 +70,10 @@ class TodoFragment : Fragment(R.layout.fragment_todoitem) {
                     true
                 }
 
-//                R.id.more -> {
-//                    Toast.makeText(requireContext(), "设置-敬请期待", Toast.LENGTH_SHORT).show()
-//                    true
-//                }
+                R.id.more -> {
+                    Toast.makeText(requireContext(), "设置-敬请期待", Toast.LENGTH_SHORT).show()
+                    true
+                }
                 R.id.important -> {
                     ImportantDialogFragment().show(childFragmentManager, "ImportantDialogFragment")
                     true

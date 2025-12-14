@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.graphics.toColorInt
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.example.todoapp.data.database.TodoDatabase
@@ -130,7 +131,8 @@ class RecordFragment : Fragment() {
             calendar.timeInMillis +=  dayMills
         }
         val dataSet = BarDataSet(entries, "最近7天专注时长(分钟)")
-        dataSet.color = Color.parseColor("#4CAF50")
+        //dataSet.color = Color.parseColor("#4CAF50")
+        dataSet.color = "#4CAF50".toColorInt()
         val barData = BarData(dataSet)
         barData.barWidth = 0.6f
         binding.barChart.data = barData
