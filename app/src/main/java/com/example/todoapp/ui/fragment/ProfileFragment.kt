@@ -27,8 +27,8 @@ import java.io.File
 import java.io.FileOutputStream
 
 class ProfileFragment : Fragment() {
-
-    private lateinit var binding: FragmentProfileBinding
+    private var _binding: FragmentProfileBinding? = null
+    private val binding get() = _binding!!
     private var currentUser: User? = null
     //注册图片选择器
     private val pickImageLauncher = registerForActivityResult(
@@ -72,7 +72,7 @@ class ProfileFragment : Fragment() {
     ): View {
         // Inflate the layout for this fragment
         //return inflater.inflate(R.layout.fragment_profile, container, false)
-        binding = FragmentProfileBinding.inflate(inflater, container, false)
+        _binding = FragmentProfileBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -106,7 +106,7 @@ class ProfileFragment : Fragment() {
         binding.btnOut.setOnClickListener {
             val prefs = requireContext().getSharedPreferences("todo_prefs", Context.MODE_PRIVATE)
             prefs.edit {
-                remove("login_user")
+                remove("login_user")//移除登录状态
             }
             val intent = Intent(requireContext(), LoginActivity::class.java).apply {
                 // 清空回退栈，避免按返回键又回到 MainActivity

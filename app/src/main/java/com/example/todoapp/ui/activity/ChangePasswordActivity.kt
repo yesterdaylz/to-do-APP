@@ -49,7 +49,6 @@ class ChangePasswordActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-
             // 取当前登录用户
             val prefs = getSharedPreferences("todo_prefs", Context.MODE_PRIVATE)
             val username = prefs.getString("login_user", null)

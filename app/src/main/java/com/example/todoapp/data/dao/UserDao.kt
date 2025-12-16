@@ -11,6 +11,7 @@ import com.example.todoapp.data.entity.User
 interface UserDao {
     @Query ("SELECT * FROM user WHERE username =:username LIMIT 1")
     suspend fun getByUsername(username: String): User?
+    //避免用户冲突
     @Insert(onConflict = OnConflictStrategy.ABORT)
     suspend fun insert(user: User): Long
     @Query("SELECT * FROM user WHERE username = :username AND password = :password LIMIT 1")

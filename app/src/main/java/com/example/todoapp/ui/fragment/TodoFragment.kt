@@ -29,7 +29,8 @@ class TodoFragment : Fragment(R.layout.fragment_todoitem) {
         fun onDrawerMenuClicked ()
     }
     private var drawerMenuClickListener: OnDrawerMenuClickListener? = null
-    private lateinit var binding: FragmentTodoBinding
+    private var _binding: FragmentTodoBinding? = null
+    private val binding get() = _binding!!
     override fun onAttach(context: Context) {
         super.onAttach(context)
         //判断是否实现接口
@@ -52,7 +53,7 @@ class TodoFragment : Fragment(R.layout.fragment_todoitem) {
         savedInstanceState: Bundle?
     ): View {
         // Inflate the layout for this fragment
-        binding = FragmentTodoBinding.inflate(inflater, container, false)
+        _binding = FragmentTodoBinding.inflate(inflater, container, false)
         return binding.root
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

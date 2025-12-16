@@ -23,7 +23,7 @@ class FocusTimerActivity : AppCompatActivity() {
     // 背景BGM（循环）
     private var bgmPlayer: MediaPlayer? = null
 
-    // 完成提示音播放器（短音效，每次播完释放）
+    // 完成提示音播放器
     private var finishPlayer: MediaPlayer? = null
     private var musicToggleListener: CompoundButton.OnCheckedChangeListener? = null
 
@@ -32,14 +32,17 @@ class FocusTimerActivity : AppCompatActivity() {
         binding = ActivityFocusTimerBinding.inflate(layoutInflater)
         setContentView(binding.root)
         // 初始化 ViewModel，不懂太新太旧都给我警告
+//        @SuppressLint("NewApi")
+//        val config =
+//            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
+//                intent.getParcelableExtra("config", TimerConfig::class.java)
+//            } else {
+//                @Suppress("DEPRECATION")
+//                intent.getParcelableExtra("config") as? TimerConfig
+//            }!!
         @SuppressLint("NewApi")
-        val config =
-            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
-                intent.getParcelableExtra("config", TimerConfig::class.java)
-            } else {
-                @Suppress("DEPRECATION")
-                intent.getParcelableExtra("config") as? TimerConfig
-            }!!
+        val config = intent.getParcelableExtra("config", TimerConfig::class.java)
+            ?: throw IllegalArgumentException("NULL")
         val username = intent.getStringExtra("username") ?: ""
         val db = TodoDatabase.getInstance(this)
         val factory = FocusTimerViewModelFactory(config, username, db)
