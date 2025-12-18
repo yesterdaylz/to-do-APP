@@ -52,8 +52,8 @@ class LoginActivity : AppCompatActivity() {
                     Toast.makeText(this, getString(R.string.error_username_empty), Toast.LENGTH_SHORT).show()
                     return@setOnClickListener
                 }
-                if (username.isEmpty()) {
-                    Toast.makeText(this, getString(R.string.error_username_empty), Toast.LENGTH_SHORT).show()
+                if (pwd.isEmpty()) {
+                    Toast.makeText(this, getString(R.string.error_password_empty), Toast.LENGTH_SHORT).show()
                     return@setOnClickListener
                 }
             }
