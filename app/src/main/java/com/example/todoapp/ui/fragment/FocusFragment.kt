@@ -94,6 +94,10 @@ class FocusFragment : Fragment() {
         }
         startActivity(intent)
     }
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
     companion object {
         @JvmStatic
         fun newInstance(username: String) =

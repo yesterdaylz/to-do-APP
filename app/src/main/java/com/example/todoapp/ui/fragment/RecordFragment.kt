@@ -146,6 +146,10 @@ class RecordFragment : Fragment() {
         //刷新图表显示
         binding.barChart.invalidate()
     }
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
 
     companion object {
         @JvmStatic

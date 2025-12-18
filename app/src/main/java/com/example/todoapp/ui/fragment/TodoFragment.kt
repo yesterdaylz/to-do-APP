@@ -195,6 +195,10 @@ class TodoFragment : Fragment(R.layout.fragment_todoitem) {
             LocaleListCompat.forLanguageTags(newLanguageTag)
         )
     }
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
 
 
 
