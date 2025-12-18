@@ -72,9 +72,10 @@ class TodoAdapter (
         }
         val date = Date(item.dueDay)
         val format = SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault())
-        holder.tvDueTime.text = "截止：${format.format(date)}"
+        holder.tvDueTime.text = holder.itemView.context.getString(R.string.due_time_prefix, format.format(date))
+
         holder.imgPin.visibility = if (item.pin) View.VISIBLE else View.GONE//标记是否置顶
-        holder.tvCategory.text = item.category ?: "默认"
+        holder.tvCategory.text = item.category ?: holder.itemView.context.getString(R.string.category_default)
         val safeIndex = item.background.coerceIn(0, backgrounds.lastIndex)
         //holder.cardTodo.setBackgroundResource(backgrounds[safeIndex])
         //val drawable = ContextCompat.getDrawable(holder.itemView.context, backgrounds[safeIndex])

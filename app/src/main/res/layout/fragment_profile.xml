@@ -102,7 +102,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="编辑资料"
+                    android:text="@string/edit_profile"
                     android:textSize="16sp" />
             </LinearLayout>
 
@@ -118,7 +118,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="修改密码"
+                    android:text="@string/change_pwd"
                     android:textSize="16sp" />
             </LinearLayout>
 
@@ -134,7 +134,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="关于作者"
+                    android:text="@string/author"
                     android:textSize="16sp" />
             </LinearLayout>
 
@@ -142,7 +142,7 @@
                 android:id="@+id/btnOut"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="退出登录"
+                android:text="@string/out"
                 android:layout_marginTop="24dp"/>
 
         </LinearLayout>

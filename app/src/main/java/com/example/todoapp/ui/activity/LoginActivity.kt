@@ -48,8 +48,14 @@ class LoginActivity : AppCompatActivity() {
             val username = binding.etUsername.text.toString().trim()
             val pwd = binding.etPwd.text.toString().trim()
             if(username.isEmpty() || pwd.isEmpty()){
-                Toast.makeText(this,"账号或密码不能为空",Toast.LENGTH_SHORT).show()
-                return@setOnClickListener
+                if (username.isEmpty()) {
+                    Toast.makeText(this, getString(R.string.error_username_empty), Toast.LENGTH_SHORT).show()
+                    return@setOnClickListener
+                }
+                if (username.isEmpty()) {
+                    Toast.makeText(this, getString(R.string.error_username_empty), Toast.LENGTH_SHORT).show()
+                    return@setOnClickListener
+                }
             }
             //启动协程，与当前Activity生命周期绑定，避免内存泄漏
             lifecycleScope.launch(Dispatchers.IO) {
@@ -64,7 +70,7 @@ class LoginActivity : AppCompatActivity() {
                         goToMain(username)
                         finish()
                     }else{
-                        Toast.makeText(this@LoginActivity,"账号或密码错误",Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this@LoginActivity,getString(R.string.error_pwd_username),Toast.LENGTH_SHORT).show()
                     }
                 }
             }

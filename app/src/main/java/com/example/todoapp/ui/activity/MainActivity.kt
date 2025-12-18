@@ -46,7 +46,7 @@ class MainActivity : AppCompatActivity(), TodoFragment.OnDrawerMenuClickListener
 
             val ok = copyUriToFile(uri, coverFile())
             if (!ok) {
-                Toast.makeText(this, "封面保存失败", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this,  getString(R.string.error_cover_save_failed), Toast.LENGTH_SHORT).show()
                 return@registerForActivityResult
             }
             // 回显封面
@@ -117,7 +117,7 @@ class MainActivity : AppCompatActivity(), TodoFragment.OnDrawerMenuClickListener
                 finish()
             } else {
                 lastBackPressedTime = now
-                Toast.makeText(this@MainActivity, "再按一次退出", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@MainActivity, getString(R.string.exit_app_confirmation), Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -174,9 +174,9 @@ class MainActivity : AppCompatActivity(), TodoFragment.OnDrawerMenuClickListener
         when (requestCode) {
             REQ_POST_NOTIFICATIONS -> {
                 if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    Toast.makeText(this, "通知权限已授予", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, getString(R.string.permission_notification_granted), Toast.LENGTH_SHORT).show()
                 } else {
-                    Toast.makeText(this, "缺少通知权限，可能影响功能使用", Toast.LENGTH_LONG).show()
+                    Toast.makeText(this, getString(R.string.permission_notification_denied), Toast.LENGTH_LONG).show()
                 }
             }
             else -> super.onRequestPermissionsResult(requestCode, permissions, grantResults)

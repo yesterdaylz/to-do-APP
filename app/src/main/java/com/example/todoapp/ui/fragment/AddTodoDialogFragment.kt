@@ -46,7 +46,13 @@ class AddTodoDialogFragment: DialogFragment() {
         val btnSave = view.findViewById<Button>(R.id.btnSave)
         val spCategory = view.findViewById<android.widget.Spinner>(R.id.spCategory)
         val cbPin= view.findViewById<android.widget.CheckBox>(R.id.cbTop)
-        val categories = listOf("默认", "学习", "工作", "生活", "其他")
+        val categories = listOf(
+            getString(R.string.category_default),
+            getString(R.string.category_study),
+            getString(R.string.category_work),
+            getString(R.string.category_life),
+            getString(R.string.category_other)
+        )
         val adapterCategory = android.widget.ArrayAdapter(
             requireContext(),
             android.R.layout.simple_spinner_item,
@@ -68,9 +74,9 @@ class AddTodoDialogFragment: DialogFragment() {
             val index = categories.indexOf(todo.category).takeIf { it >= 0 } ?: 0
             spCategory.setSelection(index)//设置选中索引
             cbPin.isChecked = todo.pin
-            btnPickDueTime.text = "截止时间：${format.format(Date(todo.dueDay))}"
+            btnPickDueTime.text = getString(R.string.due_time_prefix, format.format(Date(todo.dueDay)))
             todo.remindTime?.let {
-                btnPickRemindTime.text = "提醒时间：${format.format(Date(it))}"
+                btnPickRemindTime.text = getString(R.string.remind_time_prefix, format.format(Date(it)))
             }
         }
 
@@ -83,7 +89,7 @@ class AddTodoDialogFragment: DialogFragment() {
                 initialCalendar = dueCalendar,
                 onTimeSelected = { timeMillis, formatted ->
                     dueTimeMillis = timeMillis
-                    btnPickDueTime.text = "截止时间：$formatted"
+                    btnPickDueTime.text = getString(R.string.due_time_prefix, formatted)
                 }
             )
         }
@@ -93,7 +99,7 @@ class AddTodoDialogFragment: DialogFragment() {
                 initialCalendar = remindCalendar,
                 onTimeSelected = { timeMillis, formatted ->
                     remindTimeMillis = timeMillis
-                    btnPickRemindTime.text = "提醒时间：$formatted"
+                    btnPickRemindTime.text = getString(R.string.remind_time_prefix, formatted)
                 }
             )
         }
@@ -105,7 +111,7 @@ class AddTodoDialogFragment: DialogFragment() {
             val pin = cbPin.isChecked
 
             if (title.isEmpty()) {
-                etTitle.error = "标题不能为空"
+                etTitle.error = getString(R.string.error_title_empty)
                 return@setOnClickListener
             }
 
@@ -166,7 +172,7 @@ class AddTodoDialogFragment: DialogFragment() {
     ) {
 
         val datePicker = MaterialDatePicker.Builder.datePicker()
-            .setTitleText("选择日期")
+            .setTitleText(getString(R.string.date_picker_title))
             .setSelection(initialCalendar.timeInMillis)
             .setTheme(R.style.MyDatePickerTheme)
             .build()
@@ -179,7 +185,7 @@ class AddTodoDialogFragment: DialogFragment() {
 
 
             val timePicker = MaterialTimePicker.Builder()
-                .setTitleText("选择时间")
+                .setTitleText(getString(R.string.time_picker_title))
                 .setTimeFormat(TimeFormat.CLOCK_24H)
                 .setHour(initialCalendar.get(Calendar.HOUR_OF_DAY))
                 .setMinute(initialCalendar.get(Calendar.MINUTE))

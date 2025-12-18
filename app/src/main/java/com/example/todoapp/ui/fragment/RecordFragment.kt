@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import androidx.core.graphics.toColorInt
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
+import com.example.todoapp.R
 import com.example.todoapp.data.database.TodoDatabase
 import com.example.todoapp.data.entity.TimeRecord
 import com.example.todoapp.databinding.FragmentRecordBinding
@@ -103,7 +104,8 @@ class RecordFragment : Fragment() {
         }
         val count = todayDuration.size
         val minutes = todayDuration.sumOf { it.duration }
-        binding.tvTodayInfo.text = "今天专注：$count 次，$minutes 分钟"
+        binding.tvTodayInfo.text = getString(R.string.record_today_info, count, minutes)
+
     }
     private fun updateChart(list: List<TimeRecord>) {
         // 最近 7 天
@@ -130,7 +132,7 @@ class RecordFragment : Fragment() {
             entries.add(BarEntry(i.toFloat(), minutes.toFloat()))
             calendar.timeInMillis +=  dayMills
         }
-        val dataSet = BarDataSet(entries, "最近7天专注时长(分钟)")
+        val dataSet = BarDataSet(entries, getString(R.string.chart_label_last_7_days))
         //dataSet.color = Color.parseColor("#4CAF50")
         dataSet.color = "#4CAF50".toColorInt()
         val barData = BarData(dataSet)

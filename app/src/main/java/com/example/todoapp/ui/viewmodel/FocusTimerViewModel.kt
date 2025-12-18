@@ -1,9 +1,12 @@
 package com.example.todoapp.ui.viewmodel
 
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.application
 import androidx.lifecycle.viewModelScope
+import com.example.todoapp.R
 import com.example.todoapp.data.database.TodoDatabase
 import com.example.todoapp.data.entity.TimeRecord
 import com.example.todoapp.logic.motto.ApiClient
@@ -17,10 +20,11 @@ import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 
 class FocusTimerViewModel(
+    application: Application,
     private val config: TimerConfig,
     private val username: String,
     private val database: TodoDatabase
-) : ViewModel() {
+) : AndroidViewModel(application) {
     // 名言 LiveData
     private val _quoteLiveData = MutableLiveData<String>()
     val quoteLiveData: LiveData<String> = _quoteLiveData
@@ -102,7 +106,8 @@ class FocusTimerViewModel(
         when (config.mode) {
             TimerMode.STOPWATCH -> {
                 _timeLiveData.value = formatTime(0)
-                _pomodoroInfoLiveData.value = "目标时长：${config.minutes} 分钟"
+                _pomodoroInfoLiveData.value = application.getString(R.string.timer_target_duration, config.minutes)
+
             }
             TimerMode.COUNTDOWN -> {
                 _timeLiveData.value = formatTime(config.minutes * 60)
@@ -117,9 +122,9 @@ class FocusTimerViewModel(
 
     private fun updatePomodoroInfo() {
         if (config.mode != TimerMode.POMODORO) return
-        val phase = if (inBreak) "休息" else "专注"
-        _pomodoroInfoLiveData.value =
-            "第 $currentPomodoro/${config.pomodoroCount} 个番茄 - 当前：$phase"
+        val phase = if (inBreak) application.getString(R.string.rest) else application.getString(R.string.focus)
+        _pomodoroInfoLiveData.value = application.getString(R.string.timer_pomodoro_info, currentPomodoro, config.pomodoroCount, phase)
+
     }
     //正计时
     private fun startStopwatch() {
@@ -141,7 +146,6 @@ class FocusTimerViewModel(
             saveDuration(config.minutes)
             timerSoundState.postValue("STOP")
 
-            saveDuration(config.minutes)
         }
     }
     //倒计时/番茄钟
@@ -204,7 +208,8 @@ class FocusTimerViewModel(
             while (remainingSeconds > 0) {
                 delay(1000)
                 remainingSeconds--
-                _timeLiveData.value = "休息 " + formatTime(remainingSeconds)
+                _timeLiveData.value = application.getString(R.string.rest) + formatTime(remainingSeconds)
+
             }
             // 休息结束，下一轮工作
             inBreak = false
@@ -238,7 +243,8 @@ class FocusTimerViewModel(
     private fun formatTime(totalSeconds: Int): String {
         val m = totalSeconds / 60
         val s = totalSeconds % 60
-        return String.format("%02d:%02d", m, s)
+        return String.format(java.util.Locale.getDefault(), "%02d:%02d", m, s)
+
     }
     private suspend fun getOneQuote() {
         try {
@@ -252,7 +258,8 @@ class FocusTimerViewModel(
             _quoteLiveData.postValue(text)
         } catch (e: Exception) {
             e.printStackTrace()
-            _quoteLiveData.postValue("名言加载失败")
+            _quoteLiveData.postValue(application.getString(R.string.quote_load_failed))
+
         }
     }
     fun setBgmEnabled(enabled: Boolean) {

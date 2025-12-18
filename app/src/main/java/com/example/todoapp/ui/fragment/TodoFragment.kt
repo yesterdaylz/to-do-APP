@@ -11,6 +11,7 @@ import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.os.LocaleListCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.example.todoapp.R
@@ -68,7 +69,7 @@ class TodoFragment : Fragment(R.layout.fragment_todoitem) {
         binding.toolbar.setOnMenuItemClickListener {
             when (it.itemId) {
 
-                R.id.more -> {
+                R.id.night -> {
                     val currentNightMode = resources.configuration.uiMode and android.content.res.Configuration.UI_MODE_NIGHT_MASK
                     when (currentNightMode) {
                         android.content.res.Configuration.UI_MODE_NIGHT_YES -> {
@@ -83,6 +84,10 @@ class TodoFragment : Fragment(R.layout.fragment_todoitem) {
 
                 R.id.important -> {
                     ImportantDialogFragment().show(childFragmentManager, "ImportantDialogFragment")
+                    true
+                }
+                R.id.lang -> {
+                    toggleLanguage()
                     true
                 }
 
@@ -100,12 +105,12 @@ class TodoFragment : Fragment(R.layout.fragment_todoitem) {
             //删除
             onDeleteClick = { todo ->
                 AlertDialog.Builder(requireContext())
-                    .setTitle("删除待办？")
-                    .setMessage("确定要删除 '${todo.title}' 吗/(ㄒoㄒ)/~~？")
-                    .setPositiveButton("删除") { _, _ ->
+                    .setTitle(R.string.todo_delete_title)
+                    .setMessage(getString(R.string.todo_delete_message, todo.title))
+                    .setPositiveButton(R.string.todo_delete_confirm) { _, _ ->
                         viewModel.deleteTodo(todo)
                     }
-                    .setNegativeButton("我不小心点到了", null)
+                    .setNegativeButton(R.string.todo_delete_cancel, null)
                     .show()
             },
             onToggleDone = { todo ->
@@ -116,7 +121,14 @@ class TodoFragment : Fragment(R.layout.fragment_todoitem) {
         binding.rvTodo.layoutManager =
             androidx.recyclerview.widget.LinearLayoutManager(requireContext())
         binding.rvTodo.adapter = adapter
-        val categories = listOf("全部","默认" ,"学习" ,"工作" ,"生活" ,"其他")
+        val categories = listOf(
+            getString(R.string.category_all),
+            getString(R.string.category_default),
+            getString(R.string.category_study),
+            getString(R.string.category_work),
+            getString(R.string.category_life),
+            getString(R.string.category_other)
+        )
         binding.spCategory.dropDownWidth = 150 * resources.displayMetrics.density.toInt()
         val spinnerAdapter = ArrayAdapter(
             requireContext(),
@@ -144,7 +156,7 @@ class TodoFragment : Fragment(R.layout.fragment_todoitem) {
             }
             override fun onNothingSelected(parent: AdapterView<*>?) {
                 // 不选就当“全部”
-                categoryFilter("全部")
+                categoryFilter(getString(R.string.category_all))
             }
         }
         //观察 LiveData，自动更新界面
@@ -162,18 +174,28 @@ class TodoFragment : Fragment(R.layout.fragment_todoitem) {
     }
     private fun categoryFilter(category: String) {
         val filtered = when (category) {
-            "全部" -> allTodo
+            getString(R.string.category_all) -> allTodo
             else -> allTodo.filter { it.category == category }
         }
 
         // 如果筛选结果为空，展示提示
         if (filtered.isEmpty()) {
-            Toast.makeText(requireContext(), "没有找到符合条件的待办事项", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), R.string.todo_filter_no_results, Toast.LENGTH_SHORT).show()
         }
 
         // 更新 adapter
         adapter.submitList(filtered)
     }
+    private fun toggleLanguage() {
+        val currentLocale = resources.configuration.locales[0].language
+
+        val newLanguageTag = if (currentLocale == "zh") "en" else "zh-CN"
+
+        AppCompatDelegate.setApplicationLocales(
+            LocaleListCompat.forLanguageTags(newLanguageTag)
+        )
+    }
+
 
 
 

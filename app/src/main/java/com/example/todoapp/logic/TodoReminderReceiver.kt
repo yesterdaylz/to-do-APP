@@ -21,7 +21,7 @@ class TodoReminderReceiver : BroadcastReceiver() {
 
     override fun onReceive(context: Context, intent: Intent) {
         //Log.d("ReminderReceiver", "Broadcast received!")
-        val title = intent.getStringExtra("title") ?: "待办提醒"
+        val title = intent.getStringExtra("title") ?: context.getString(R.string.notification)
         val description = intent.getStringExtra("description") ?: ""
         val todoId = intent.getLongExtra("todo_id", -1L)
         val autoDone = intent.getBooleanExtra("auto_done", false)

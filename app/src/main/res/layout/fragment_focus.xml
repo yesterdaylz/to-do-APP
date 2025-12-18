@@ -21,20 +21,20 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:checked="true"
-            android:text="正计时"
+            android:text="@string/focus_stopwatch"
             />
 
         <RadioButton
             android:id="@+id/rbCountdown"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="倒计时"/>
+            android:text="@string/focus_countdown"/>
 
         <RadioButton
             android:id="@+id/rbPomodoro"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="番茄钟"/>
+            android:text="@string/focus_pomodoro"/>
     </RadioGroup>
     <LinearLayout
         android:id="@+id/layoutTimeSet"
@@ -50,7 +50,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="时长(分钟)："
+            android:text="@string/focus_duration_minutes"
             android:textStyle="bold"/>
 
         <NumberPicker
@@ -80,7 +80,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="番茄个数："
+                android:text="@string/focus_pomodoro_count"
                 android:textStyle="bold" />
 
             <NumberPicker
@@ -99,7 +99,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="短休(分钟)："
+                android:text="@string/focus_short_break"
                 android:textStyle="bold" />
 
             <NumberPicker
@@ -113,14 +113,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:text="每完成4个番茄，长休 15 分钟" />
+            android:text="@string/focus_long_break_info"/>
     </LinearLayout>
 
     <Button
         android:id="@+id/btnStartFocus"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="开始专注"
+        android:text="@string/focus_start_button"
         android:layout_marginTop="40dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"

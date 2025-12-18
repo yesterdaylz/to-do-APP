@@ -3,13 +3,17 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/important"
-        android:title="食用\n须知"
+        android:title="@string/todo_menu_important"
         app:showAsAction="always"/>
 
     <item
-        android:id="@+id/more"
+        android:id="@+id/night"
         android:icon="@drawable/night"
-        android:title="深色模式"
-        app:showAsAction="always"/>
-
+        android:title="@string/todo_menu_dark_mode"
+        app:showAsAction="never"/>
+    <item
+        android:id="@+id/lang"
+        android:title="@string/menu_lang"
+        android:icon="@drawable/transform"
+        app:showAsAction="never"/>
 </menu>

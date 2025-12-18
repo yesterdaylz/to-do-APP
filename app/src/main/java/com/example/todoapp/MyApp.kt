@@ -24,10 +24,10 @@ class MyApp : Application() {
 
             val channel = NotificationChannel(
                 "todo_reminder_channel",
-                "待办提醒",
+                getString(R.string.notification),
                 NotificationManager.IMPORTANCE_HIGH
             ).apply {
-                description = "待办事项截止/提醒通知"
+                description = getString(R.string.notification_channel_description)
                 setSound(soundUri, audioAttributes)
             }
 

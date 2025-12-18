@@ -12,7 +12,7 @@
             android:id="@+id/etTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="标题"
+            android:hint="@string/todo_dialog_title_hint"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
@@ -21,7 +21,7 @@
             android:id="@+id/etDescription"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="描述"
+            android:hint="@string/todo_dialog_description_hint"
             android:layout_marginTop="8dp"
             app:layout_constraintTop_toBottomOf="@id/etTitle"
             app:layout_constraintStart_toStartOf="parent"
@@ -38,7 +38,7 @@
             android:id="@+id/cbTop"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="置顶"
+            android:text="@string/todo_dialog_pin_checkbox"
             app:layout_constraintTop_toBottomOf="@+id/btnSave"
             app:layout_constraintStart_toStartOf="parent"/>
 
@@ -47,7 +47,7 @@
             android:id="@+id/btnPickDueTime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="选择截止时间"
+            android:text="@string/todo_dialog_pick_due_time"
             android:layout_marginTop="8dp"
             app:layout_constraintTop_toBottomOf="@id/etDescription"
             app:layout_constraintStart_toStartOf="parent" />
@@ -56,7 +56,7 @@
             android:id="@+id/btnPickRemindTime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="选择提醒时间"
+            android:text="@string/todo_dialog_pick_remind_time"
             android:layout_marginTop="8dp"
             app:layout_constraintTop_toBottomOf="@id/btnPickDueTime"
             app:layout_constraintStart_toStartOf="parent" />
@@ -65,7 +65,7 @@
             android:id="@+id/btnSave"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="完成"
+            android:text="@string/todo_dialog_save_button"
             android:layout_marginTop="16dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

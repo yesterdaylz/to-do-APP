@@ -38,7 +38,7 @@ class ProfileFragment : Fragment() {
             // 复制到 app 私有目录
             val savedPath = putUriToFile(pickedUri)
             if (savedPath == null) {
-                Toast.makeText(requireContext(), "头像保存失败", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), getString(R.string.error_avatar_save_failed), Toast.LENGTH_SHORT).show()
                 return@let
             }
 
@@ -100,7 +100,7 @@ class ProfileFragment : Fragment() {
                 startActivity(intent)
             } catch (e: Exception) {
                 e.printStackTrace()
-                Toast.makeText(requireContext(), "无法打开网页", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), getString(R.string.error_open_web_failed), Toast.LENGTH_SHORT).show()
             }
         }
         binding.btnOut.setOnClickListener {
@@ -142,10 +142,10 @@ class ProfileFragment : Fragment() {
 
     private fun showUserInfo(user: User) {
         binding.tvNickname.text = user.nickname ?: user.username
-        binding.tvIntroduction.text = user.introduction ?: "这个人很懒，什么都没写~"
-        binding.tvGender.text = getString(R.string.gender_format, user.gender ?: "未知")
-        binding.tvRegion.text = getString(R.string.region_format, user.region ?: "未知")
-        binding.tvSchool.text =  getString(R.string.school_format, user.school?: "未知")
+        binding.tvIntroduction.text = user.introduction ?: getString(R.string.default_introduction)
+        binding.tvGender.text = getString(R.string.gender_format, user.gender ?: getString(R.string.unknown))
+        binding.tvRegion.text = getString(R.string.region_format, user.region ?: getString(R.string.unknown))
+        binding.tvSchool.text =  getString(R.string.school_format, user.school?: getString(R.string.unknown))
         //展示头像
         val avatarPath = user.avatarUri
         if (!avatarPath.isNullOrEmpty()) {

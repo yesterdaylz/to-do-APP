@@ -87,7 +87,7 @@ class EditProfileActivity : AppCompatActivity() {
     private fun saveProfile() {
         val user = currentUser
         if (user == null) {
-            Toast.makeText(this, "用户信息不存在", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, getString(R.string.error_user_info_not_found), Toast.LENGTH_SHORT).show()
             return
         }
 
@@ -104,7 +104,7 @@ class EditProfileActivity : AppCompatActivity() {
             val userDao = TodoDatabase.getInstance(this@EditProfileActivity).userDao()
             userDao.update(newUser)
             withContext(Dispatchers.Main) {
-                Toast.makeText(this@EditProfileActivity, "保存成功", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@EditProfileActivity, getString(R.string.save_succeed), Toast.LENGTH_SHORT).show()
                 finish()
             }
         }

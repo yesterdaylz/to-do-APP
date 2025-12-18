@@ -45,7 +45,7 @@ class FocusTimerActivity : AppCompatActivity() {
             ?: throw IllegalArgumentException("NULL")
         val username = intent.getStringExtra("username") ?: ""
         val db = TodoDatabase.getInstance(this)
-        val factory = FocusTimerViewModelFactory(config, username, db)
+        val factory = FocusTimerViewModelFactory(this.application, config, username, db)
         viewModel = ViewModelProvider(this, factory)[FocusTimerViewModel::class.java]
         observeViewModel()
         setupViews()
@@ -126,12 +126,12 @@ class FocusTimerActivity : AppCompatActivity() {
 
     private fun startTimer() {
         viewModel.startTimerOrResume()
-        binding.btnStartPause.text = "暂停"
+        binding.btnStartPause.text = getString(R.string.button_pause)
     }
 
     private fun pauseTimer() {
         viewModel.pauseTimer()
-        binding.btnStartPause.text = "继续"
+        binding.btnStartPause.text = getString(R.string.button_resume)
     }
 
     private fun confirmExit() {
@@ -140,10 +140,10 @@ class FocusTimerActivity : AppCompatActivity() {
             return
         }
         AlertDialog.Builder(this)
-            .setTitle("提示")
-            .setMessage("专注计时还未结束，确定要退出吗？")
-            .setPositiveButton("退出") { _, _ -> finish() }
-            .setNegativeButton("继续专注", null)
+            .setTitle(getString(R.string.alert_title_tip))
+            .setMessage(getString(R.string.alert_message_exit_confirm))
+            .setPositiveButton(getString(R.string.alert_button_exit)) { _, _ -> finish() }
+            .setNegativeButton(getString(R.string.alert_button_continue), null)
             .show()
     }
 

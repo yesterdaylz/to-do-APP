@@ -1,10 +1,192 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name"> 柠檬 Todo</string>
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="gender_format">性别：%s</string>
     <string name="region_format">地区：%s</string>
     <string name="school_format">学校：%s</string>
     <string name="default_introduction">这个人很懒，什么都没写~</string>
+    <string name="unknown">未知</string>
+    <string name="error_open_web_failed">无法打开网页</string>
+
+    <string name="hint_old_password">请输入原密码</string>
+    <string name="hint_new_password">请输入新密码</string>
+    <string name="hint_confirm_new_password">请确认新密码</string>
+    <string name="error_password_format">新密码必须包含字母和数字，且不少于8位</string>
+    <string name="error_new_password_mismatch">两次新密码不一致</string>
+    <string name="error_password_mismatch">两次密码不一致</string>
+    <string name="error_password_same">新密码不能与原密码相同</string>
+    <string name="error_not_logged_in">宁未登录，无法修改密码</string>
+    <string name="error_user_not_found">用户不存在</string>
+    <string name="error_user_info_not_found">用户信息不存在</string>
+    <string name="error_wrong_password">原密码错误，无法修改</string>
+    <string name="success_password_changed">密码修改成功，请重新登录</string>
+    <string name="save_succeed">保存成功</string>
+    <string name="error_username_empty">账号不能为空</string>
+    <string name="error_password_empty">密码不能为空</string>
+    <string name="error_pwd_username">账号或密码错误</string>
+    <string name="hint_confirm_password">请再次输入密码</string>
+    <string name="error_user_exists">账户已存在</string>
+    <string name="success_register">注册成功，请登录</string>
+
+
+
+    <string name="permission_notification_granted">通知权限已授予</string>
+    <string name="permission_notification_denied">缺少通知权限，可能影响功能使用</string>
+    <string name="notification">待办提醒</string>
+    <string name="notification_channel_description">待办事项截止/提醒通知</string>
+
+    <string name="error_cover_save_failed">封面保存失败</string>
+    <string name="error_avatar_save_failed">头像保存失败</string>
+
+
+    <string name="exit_app_confirmation">再按一次退出</string>
+
+
+
+
+    <string name="error_add_todo_failed">添加待办事项失败: %s</string>
+    <string name="error_update_todo_failed">更新待办事项失败: %s</string>
+    <string name="error_delete_todo_failed">删除待办事项失败: %s</string>
+    <string name="error_toggle_done_failed">更新完成状态失败: %s</string>
+
+
+
+
+
+
+
+
+
+
+    <string name="button_pause">暂停</string>
+    <string name="button_resume">继续</string>
+    <string name="alert_title_tip">提示</string>
+    <string name="alert_message_exit_confirm">专注计时还未结束，确定要退出吗？</string>
+    <string name="alert_button_exit">退出</string>
+    <string name="alert_button_continue">继续专注</string>
+    <string name="timer_target_duration">目标时长：%d 分钟</string>
+    <string name="rest">休息</string>
+    <string name="focus">专注</string>
+    <string name="timer_pomodoro_info">第 %d/%d 个番茄 - 当前：%s</string>
+    <string name="quote_load_failed">名言加载失败</string>
+
+    <string name="record_today_info">今天专注：%d 次，%d 分钟</string>
+    <string name="record_today_info_ui">今天专注：0 次，0 分钟</string>
+    <string name="chart_label_last_7_days">最近7天专注时长(分钟)</string>
+
+
+    <!-- 待办事项分类 -->
+    <string name="category_default">默认</string>
+    <string name="category_study">学习</string>
+    <string name="category_work">工作</string>
+    <string name="category_life">生活</string>
+    <string name="category_other">其他</string>
+    <string name="category_all">全部</string>
+
+    <!-- 时间显示格式 -->
+    <string name="due_time_prefix">截止时间：%s</string>
+    <string name="remind_time_prefix">提醒时间：%s</string>
+
+    <!-- 错误提示 -->
+    <string name="error_title_empty">标题不能为空</string>
+
+    <!-- 选择器标题 -->
+    <string name="date_picker_title">选择日期</string>
+    <string name="time_picker_title">选择时间</string>
+
+
+
+
+
+    <string name="old_password">原密码</string>
+    <string name="new_password">新密码</string>
+    <string name="confirm_new_password">确认新密码</string>
+    <string name="button_save_password">保存修改</string>
+    <string name="gender">性别</string>
+    <string name="region">地区</string>
+    <string name="school">学校</string>
+    <string name="introduction">简介</string>
+    <string name="nickname">昵称</string>
+    <string name="save">保存</string>
+    <string name="pick_a_picture">点击头像更换（从相册选择）</string>
+    <string name="bgm">背景音乐</string>
+    <string name="text_loading_quote">名言加载中……</string>
+    <string name="text_pomodoro_mode">番茄钟</string>
+    <string name="text_default_time">25:00</string>
+    <string name="button_start">开始</string>
+    <string name="button_finish">结束</string>
+    <string name="login_welcome">欢迎登录</string>
+    <string name="username_hint">账号</string>
+    <string name="password_hint">密码</string>
+    <string name="remember_password">记住密码</string>
+    <string name="login_button">登录</string>
+    <string name="register_button">注册</string>
+    <string name="register_title">新用户注册</string>
+    <string name="confirm_password">确认密码</string>
+    <string name="todo_dialog_title_hint">标题</string>
+    <string name="todo_dialog_description_hint">描述</string>
+    <string name="todo_dialog_pin_checkbox">置顶</string>
+    <string name="todo_dialog_pick_due_time">选择截止时间</string>
+    <string name="todo_dialog_pick_remind_time">选择提醒时间</string>
+    <string name="todo_dialog_save_button">完成</string>
+    <string name="go_settings">前往设置</string>
+    <string name="edit_profile">编辑资料</string>
+    <string name="change_pwd">修改密码</string>
+    <string name="author">关于作者</string>
+    <string name="out">退出登录</string>
+    <string name="focus_stopwatch">正计时</string>
+    <string name="focus_countdown">倒计时</string>
+    <string name="focus_pomodoro">番茄钟</string>
+    <string name="focus_duration_minutes">时长(分钟)：</string>
+    <string name="focus_pomodoro_count">番茄个数：</string>
+    <string name="focus_short_break">短休(分钟)：</string>
+    <string name="focus_long_break_info">每完成4个番茄，长休 15 分钟</string>
+    <string name="focus_start_button">开始专注</string>
+    <string name="nav_header_title">每天进步一点点🍋</string>
+    <string name="nav_menu_todo">待办</string>
+    <string name="nav_menu_focus">专注</string>
+    <string name="nav_menu_record">统计</string>
+    <string name="nav_menu_profile">我的</string>
+    <string name="nav_menu_countdown">倒数日</string>
+    <string name="nav_menu_four_quadrant">四象限</string>
+    <string name="nav_menu_target">目标</string>
+    <string name="nav_menu_history">历史</string>
+    <string name="nav_menu_not_available">以上功能暂未开放</string>
+    <string name="todo_menu_important">食用 须知</string>
+    <string name="todo_menu_dark_mode">深色模式</string>
+    <string name="important_dialog_title">🍋请依次全部开启~</string>
+    <string name="important_dialog_close_button">删除</string>
+    <string name="important_dialog_description">若不设置，待办通知会被系统休眠而无法正常运行 请严格按提示设置权限，不要自己去找权限哦，自己找很可能找不全哦</string>
+    <string name="important_dialog_background_title">设置允许后台运行</string>
+    <string name="important_dialog_background_context">防止锁屏后被休眠，使提醒更加及时</string>
+    <string name="important_dialog_autostart_title">设置允许启动</string>
+    <string name="important_dialog_autostart_context">允许启动定时提醒或锁机界面</string>
+    <string name="important_dialog_lock_title">在多任务界面加锁</string>
+    <string name="important_dialog_lock_context">防止被一键清理</string>
+    <string name="guide1_title">vivo新系统在锁屏后会休眠App，这会导致待办、计时结束不提醒等问题。请按以下指引来设置权限。</string>
+    <string name="guide1_description">请放心，我们的后台耗电量很低，仅为了保持后台计时持续~ 点击前往设置-后台耗电管理-柠檬Todo-切换至【允许后台高耗电】，如图所示：</string>
+    <string name="guide1_steps">1. 前往设置 → 电池 → 后台耗电管理 2. 找到\"柠檬ToDo\" 3. 选择\"允许后台高耗电\"</string>
+    <string name="guide2_title">请开启自启动权限，确保应用能够正常启动定时提醒</string>
+    <string name="guide2_description">自启动权限允许应用在系统启动后自动运行，确保计时和提醒功能正常工作</string>
+    <string name="guide2_steps">1. 前往设置 → 应用  2. 点击权限 3. 开启自启动权限</string>
+    <string name="guide3_title">请在多任务界面锁定应用，防止被一键清理</string>
+    <string name="guide3_description">锁定应用后，即使清理后台也不会关闭计时功能</string>
+    <string name="guide3_steps">1. 打开手机多任务界面） 2. 找到\"柠檬Todo\"应用卡片 3. 向下滑动或点击小箭头 4. 点击锁形图标锁定应用</string>
+    <string name="hint_title">操作提示</string>
+    <string name="hint_message">请按照上述步骤在多任务界面锁定应用。  打开多任务界面的方法： • 全面屏手机：从底部上滑并停顿 • 虚拟键手机：点击方形多任务键 • 其他方式：请参考手机使用说明</string>
+    <string name="hint_confirm">知道了</string>
+    <string name="toast_power_setting">点击后台耗电管理-柠檬Todo-切换至【允许后台高耗电】</string>
+    <string name="toast_auto_start">点击权限-打开【自启动】</string>
+
+    <string name="todo_delete_title">删除待办？</string>
+    <string name="todo_delete_message">确定要删除 \'%s\' 吗/(ㄒoㄒ)/~~？</string>
+    <string name="todo_delete_confirm">删除</string>
+    <string name="todo_delete_cancel">我不小心点到了</string>
+    <string name="todo_filter_no_results">没有找到符合条件的待办事项</string>
+
+    <string name="menu_lang">中英切换</string>
 
 </resources>
+
+

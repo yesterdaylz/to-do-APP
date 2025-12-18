@@ -37,7 +37,7 @@ class EditProfileFragment : Fragment() {
             if (savedPath != null) {
                 binding.ivAvatar.setImageBitmap(BitmapFactory.decodeFile(savedPath))
             } else {
-                Toast.makeText(requireContext(), "头像保存失败", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), getString(R.string.error_avatar_save_failed), Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -102,7 +102,7 @@ class EditProfileFragment : Fragment() {
     private fun saveProfile() {
         val user = currentUser
         if (user == null) {
-            Toast.makeText(requireContext(), "用户信息不存在", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), getString(R.string.error_user_info_not_found), Toast.LENGTH_SHORT).show()
             return
         }
 
@@ -119,7 +119,7 @@ class EditProfileFragment : Fragment() {
             val userDao = TodoDatabase.getInstance(requireContext()).userDao()
             userDao.update(newUser)
             withContext(Dispatchers.Main) {
-                Toast.makeText(requireContext(), "保存成功", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), getString(R.string.save_succeed), Toast.LENGTH_SHORT).show()
                 // 关闭当前编辑页面（返回上一层 ProfileFragment）
                 parentFragmentManager.popBackStack()
             }

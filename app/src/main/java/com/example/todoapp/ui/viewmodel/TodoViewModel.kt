@@ -6,6 +6,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
+import com.example.todoapp.R
 import com.example.todoapp.cancelReminder
 import com.example.todoapp.data.database.TodoDatabase
 import com.example.todoapp.data.entity.Todo
@@ -29,7 +30,11 @@ class TodoViewModel(application: Application): AndroidViewModel(application) {
                 androidx.core.content.ContextCompat.getSystemService(
                     getApplication(), android.app.NotificationManager::class.java
                 )?.let {
-                    Toast.makeText(getApplication(), "添加待办事项失败: ${e.message}", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(getApplication(),
+                        getApplication<Application>()
+                            .getString(R.string.error_add_todo_failed, e.message),
+                        Toast.LENGTH_SHORT).show()
+
                 }
             }
         }
@@ -40,7 +45,10 @@ class TodoViewModel(application: Application): AndroidViewModel(application) {
                 todoDao.update(todo)
                 scheduleReminder(getApplication(), todo)   // 更新时重新设置闹钟
             } catch (e: Exception) {
-                Toast.makeText(getApplication(), "更新待办事项失败: ${e.message}", Toast.LENGTH_SHORT).show()
+                Toast.makeText(getApplication(),
+                    getApplication<Application>()
+                        .getString(R.string.error_update_todo_failed, e.message),
+                    Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -51,7 +59,10 @@ class TodoViewModel(application: Application): AndroidViewModel(application) {
                 todoDao.delete(todo)
                 cancelReminder(getApplication(),todo)// 删除闹钟
             } catch (e: Exception) {
-                Toast.makeText(getApplication(), "删除待办事项失败: ${e.message}", Toast.LENGTH_SHORT).show()
+                Toast.makeText(getApplication(),
+                    getApplication<Application>()
+                        .getString(R.string.error_delete_todo_failed, e.message),
+                    Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -66,7 +77,10 @@ class TodoViewModel(application: Application): AndroidViewModel(application) {
                     scheduleReminder(getApplication(), todo.copy(done = false))
                 }
             } catch (e: Exception) {
-                Toast.makeText(getApplication(), "更新完成状态失败: ${e.message}", Toast.LENGTH_SHORT).show()
+                Toast.makeText(getApplication(),
+                    getApplication<Application>()
+                        .getString(R.string.error_toggle_done_failed, e.message),
+                    Toast.LENGTH_SHORT).show()
             }
         }
     }

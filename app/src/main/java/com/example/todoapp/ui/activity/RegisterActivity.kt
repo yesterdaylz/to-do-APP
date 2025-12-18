@@ -30,25 +30,25 @@ class RegisterActivity : AppCompatActivity() {
             //判空
             if (username.isEmpty() || pwd.isEmpty() || pwdAgain.isEmpty()) {
                 if (username.isEmpty()) {
-                    binding.etUsername.error = "账号不能为空"
+                    binding.etUsername.error = getString(R.string.error_username_empty)
                 }
                 if (pwd.isEmpty()) {
-                    binding.etPwd.error = "密码不能为空"
+                    binding.etPwd.error = getString(R.string.error_password_empty)
                 }
                 if (pwdAgain.isEmpty()) {
-                    binding.etPwdAgain.error = "请再次输入密码"
+                    binding.etPwdAgain.error = getString(R.string.hint_confirm_password)
                 }
                 return@setOnClickListener
             }
             //判密码规范
             if (!isRightPassword(pwd)) {
-                Toast.makeText(this, "密码必须包含字母和数字，且不少于8位", Toast.LENGTH_SHORT)
+                Toast.makeText(this, getString(R.string.error_password_format), Toast.LENGTH_SHORT)
                     .show()
                 return@setOnClickListener
             }
             //判前后密码
             if (pwd != pwdAgain) {
-                Toast.makeText(this, "两次密码不一致", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, getString(R.string.error_password_mismatch), Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
             //存储密码
@@ -56,12 +56,12 @@ class RegisterActivity : AppCompatActivity() {
                 val exist = userDao.getByUsername(username)
                 withContext(Dispatchers.Main) {
                     if (exist != null) {
-                        Toast.makeText(this@RegisterActivity, "账户已存在", Toast.LENGTH_SHORT)
+                        Toast.makeText(this@RegisterActivity, getString(R.string.error_user_exists), Toast.LENGTH_SHORT)
                             .show()
 
                     } else {
                         userDao.insert(User(username = username, password = pwd))
-                        Toast.makeText(this@RegisterActivity, "注册成功，请登录", Toast.LENGTH_SHORT)
+                        Toast.makeText(this@RegisterActivity, getString(R.string.success_register), Toast.LENGTH_SHORT)
                             .show()
                         finish()
                     }

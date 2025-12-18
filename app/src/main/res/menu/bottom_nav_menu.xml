@@ -3,19 +3,20 @@
     <item
         android:id="@+id/navigation_todo"
         android:icon="@mipmap/ic_todo"
-        android:title="待办" />
+        android:title="@string/nav_menu_todo" />
 
     <item
         android:id="@+id/navigation_focus"
         android:icon="@mipmap/ic_sandglass"
-        android:title="专注" />
+        android:title="@string/nav_menu_focus" />
+
     <item
         android:id="@+id/navigation_record"
         android:icon="@mipmap/ic_application"
-        android:title="统计"/>
+        android:title="@string/nav_menu_record" />
+
     <item
         android:id="@+id/navigation_profile"
         android:icon="@mipmap/ic_profile"
-        android:title="我的" />
-
+        android:title="@string/nav_menu_profile" />
 </menu>
