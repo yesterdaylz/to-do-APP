@@ -1,5 +1,6 @@
 package com.example.todoapp.adapter
 
+import android.graphics.Paint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,7 +18,8 @@ import java.util.Locale
 
 class TodoAdapter (
     private val onItemClick: (Todo) -> Unit,
-    private val onDeleteClick: (Todo) -> Unit
+    private val onDeleteClick: (Todo) -> Unit,
+    private val onToggleDone: (Todo) -> Unit
 ): ListAdapter<Todo, TodoAdapter.TodoViewHolder>(DiffCallback()){
     private val backgrounds = listOf(
         R.drawable.bg_todo_7,
@@ -59,6 +61,15 @@ class TodoAdapter (
         val item = getItem(position)
         holder.tvTitle.text = item.title
         holder.tvDescription.text = item.description ?: ""
+        if (item.done) {
+            holder.tvTitle.paintFlags = holder.tvTitle.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
+            holder.tvDescription.paintFlags = holder.tvDescription.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
+            holder.itemView.alpha = 0.6f
+        } else {
+            holder.tvTitle.paintFlags = holder.tvTitle.paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv()
+            holder.tvDescription.paintFlags = holder.tvDescription.paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv()
+            holder.itemView.alpha = 1.0f
+        }
         val date = Date(item.dueDay)
         val format = SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault())
         holder.tvDueTime.text = "截止：${format.format(date)}"
@@ -71,5 +82,10 @@ class TodoAdapter (
 
         holder.itemView.setOnClickListener { onItemClick(item) }
         holder.btnDelete.setOnClickListener { onDeleteClick(item) }
+        holder.itemView.setOnLongClickListener {
+            onToggleDone(item)
+            true
+        }
+
     }
 }

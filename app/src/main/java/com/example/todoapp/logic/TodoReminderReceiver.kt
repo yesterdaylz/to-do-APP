@@ -11,7 +11,11 @@ import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.example.todoapp.R
+import com.example.todoapp.data.database.TodoDatabase
 import com.example.todoapp.ui.activity.MainActivity
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class TodoReminderReceiver : BroadcastReceiver() {
 
@@ -19,6 +23,16 @@ class TodoReminderReceiver : BroadcastReceiver() {
         //Log.d("ReminderReceiver", "Broadcast received!")
         val title = intent.getStringExtra("title") ?: "待办提醒"
         val description = intent.getStringExtra("description") ?: ""
+        val todoId = intent.getLongExtra("todo_id", -1L)
+        val autoDone = intent.getBooleanExtra("auto_done", false)
+
+        if (autoDone && todoId != -1L) {
+            CoroutineScope(Dispatchers.IO).launch {
+                TodoDatabase.getInstance(context.applicationContext)
+                    .todoDao()
+                    .setDone(todoId, true)
+            }
+        }
         //检查权限
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             if (ActivityCompat.checkSelfPermission(

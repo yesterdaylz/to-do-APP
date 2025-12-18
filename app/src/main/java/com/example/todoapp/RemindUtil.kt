@@ -60,12 +60,14 @@ fun scheduleReminder(context: Context, todo: Todo) {
 //            appContext.startActivity(intent)
 //        }
 
-    fun setAlarm(timeMillis: Long, requestCodeOffset: Int) {
+    fun setAlarm(timeMillis: Long, requestCodeOffset: Int,autoDone: Boolean) {
         if (timeMillis <= System.currentTimeMillis()) return
 
         val intent = Intent(context, TodoReminderReceiver::class.java).apply {
+            putExtra("todo_id", todo.id)
             putExtra("title", todo.title)
             putExtra("description", todo.description)
+            putExtra("auto_done", autoDone)
         }
         //唯一请求码
         val requestCode = (todo.id.toInt() * 10) + requestCodeOffset
@@ -81,9 +83,9 @@ fun scheduleReminder(context: Context, todo: Todo) {
 
     }
     todo.remindTime?.let {
-        setAlarm(it, 1)// 自定义提醒时间（如果有）
+        setAlarm(it, 1,false)// 自定义提醒时间（如果有）
     }
-    setAlarm(todo.dueDay, 2)// 截止时间提醒
+    setAlarm(todo.dueDay, 2,true)// 截止时间提醒
 }
 fun cancelReminder(context: Context, todo: Todo) {
     val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager

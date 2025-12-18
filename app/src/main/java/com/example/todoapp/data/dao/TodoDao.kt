@@ -26,4 +26,7 @@ interface TodoDao {
 
     @Query("SELECT * FROM todo WHERE id = :id LIMIT 1")
     suspend fun getTodoById(id: Long): Todo?
+    @Query("UPDATE todo SET done = :done WHERE id = :id")
+    suspend fun setDone(id: Long, done: Boolean)
+
 }

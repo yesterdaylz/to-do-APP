@@ -126,7 +126,8 @@ class AddTodoDialogFragment: DialogFragment() {
                     remindTime = remindTimeMillis,
                     background = randomBg,
                     category = category,
-                    pin = pin
+                    pin = pin,
+                    done = false
                 )
             }
 

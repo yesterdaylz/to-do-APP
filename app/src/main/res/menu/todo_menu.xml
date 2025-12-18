@@ -5,15 +5,11 @@
         android:id="@+id/important"
         android:title="食用\n须知"
         app:showAsAction="always"/>
-    <item
-        android:id="@+id/add"
-        android:icon="@drawable/time"
-        android:title="打卡"
-        app:showAsAction="always"/>
+
     <item
         android:id="@+id/more"
-        android:icon="@drawable/set"
-        android:title="中英切换"
-        app:showAsAction="never"/>
+        android:icon="@drawable/night"
+        android:title="深色模式"
+        app:showAsAction="always"/>
 
 </menu>

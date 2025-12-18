@@ -55,5 +55,21 @@ class TodoViewModel(application: Application): AndroidViewModel(application) {
             }
         }
     }
+    fun toggleDone(todo: Todo) {
+        viewModelScope.launch {
+            try {
+                val newDone = !todo.done
+                todoDao.setDone(todo.id, newDone)
+                if (newDone) {
+                    cancelReminder(getApplication(), todo)
+                } else {
+                    scheduleReminder(getApplication(), todo.copy(done = false))
+                }
+            } catch (e: Exception) {
+                Toast.makeText(getApplication(), "更新完成状态失败: ${e.message}", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
 
 }

@@ -17,6 +17,10 @@
             android:id="@+id/history"
             android:icon="@mipmap/ic_history"
             android:title="历史" />
+       <item
+            android:id="@+id/note"
+           android:icon="@mipmap/ic_cry"
+            android:title="以上功能暂未开放" />
 
 
 </menu>

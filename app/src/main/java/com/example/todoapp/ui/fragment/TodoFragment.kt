@@ -10,6 +10,7 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.example.todoapp.R
@@ -66,15 +67,20 @@ class TodoFragment : Fragment(R.layout.fragment_todoitem) {
         //顶部栏菜单
         binding.toolbar.setOnMenuItemClickListener {
             when (it.itemId) {
-                R.id.add -> {
-                    Toast.makeText(requireContext(), "打卡-敬请期待", Toast.LENGTH_SHORT).show()
+
+                R.id.more -> {
+                    val currentNightMode = resources.configuration.uiMode and android.content.res.Configuration.UI_MODE_NIGHT_MASK
+                    when (currentNightMode) {
+                        android.content.res.Configuration.UI_MODE_NIGHT_YES -> {
+                            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+                        }
+                        else -> {
+                            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+                        }
+                    }
                     true
                 }
 
-                R.id.more -> {
-                    Toast.makeText(requireContext(), "设置-敬请期待", Toast.LENGTH_SHORT).show()
-                    true
-                }
                 R.id.important -> {
                     ImportantDialogFragment().show(childFragmentManager, "ImportantDialogFragment")
                     true
@@ -101,7 +107,11 @@ class TodoFragment : Fragment(R.layout.fragment_todoitem) {
                     }
                     .setNegativeButton("我不小心点到了", null)
                     .show()
+            },
+            onToggleDone = { todo ->
+                viewModel.toggleDone(todo)
             }
+
         )
         binding.rvTodo.layoutManager =
             androidx.recyclerview.widget.LinearLayoutManager(requireContext())
