@@ -45,8 +45,8 @@ class TodoReminderReceiver : BroadcastReceiver() {
         }
         // 点击通知跳回主界面/待办Fragment
         val activityIntent = Intent(context, MainActivity::class.java).apply {
-            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-        }//全新状态打开Activity
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_SINGLE_TOP
+        }
         val pendingIntent = PendingIntent.getActivity(
             context, 0, activityIntent,
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE

@@ -7,4 +7,13 @@
         <item name="colorPrimary">@color/white</item>
         <item name="android:textColor">@color/white</item>
     </style>
+    <style name="MyDatePickerTheme" parent="ThemeOverlay.Material3.MaterialCalendar">
+        <item name="colorPrimary">@color/picker_btn</item>
+        <item name="colorOnPrimary">@android:color/black</item>
+    </style>
+
+    <style name="MyTimePickerTheme" parent="ThemeOverlay.MaterialComponents.TimePicker">
+        <item name="colorPrimary">@color/picker_btn</item>
+        <item name="colorOnPrimary">@android:color/black</item>
+    </style>
 </resources>

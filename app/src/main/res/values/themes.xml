@@ -14,10 +14,14 @@
 
     <style name="MyDatePickerTheme" parent="ThemeOverlay.Material3.MaterialCalendar">
         <item name="colorPrimary">@color/picker_btn</item>
+        <item name="colorOnPrimary">@android:color/white</item>
     </style>
 
     <style name="MyTimePickerTheme" parent="ThemeOverlay.MaterialComponents.TimePicker">
         <item name="colorPrimary">@color/picker_btn</item>
+        <item name="colorOnPrimary">@android:color/white</item>
     </style>
+
+
     <style name="Theme.ToDoApp" parent="Base.Theme.ToDoApp" />
 </resources>
