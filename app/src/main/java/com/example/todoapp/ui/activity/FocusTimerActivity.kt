@@ -88,14 +88,7 @@ class FocusTimerActivity : AppCompatActivity() {
                 binding.cbMusicToggle.setOnCheckedChangeListener(musicToggleListener)
             }
         }
-
-
-        viewModel.timerFinishedEvent.observe(this) {
-            stopBgm()
-            playFinishSound()
-        }
     }
-
 
     private fun setupViews() {
         binding.btnStartPause.setOnClickListener {

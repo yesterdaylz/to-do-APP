@@ -6,7 +6,7 @@ import retrofit2.http.Query
 
 data class Quote(
     @SerializedName("hitokoto")
-    val quote: String,
+    val quote: String?,
     val from: String?,
     @SerializedName("from_who")
     val fromWho: String?
