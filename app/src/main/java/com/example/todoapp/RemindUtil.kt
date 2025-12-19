@@ -17,15 +17,17 @@ fun scheduleReminder(context: Context, todo: Todo) {
     //获取系统闹钟服务
     val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
     //val powerManager= context.getSystemService(Context.POWER_SERVICE) as PowerManager
-    //Android8.0要通知要单独授权
+
     val notificationsEnabled = NotificationManagerCompat.from(context).areNotificationsEnabled()
     val packageName = context.packageName
     if (!notificationsEnabled) {
+        //Android8.0要通知要单独授权，跳转到应用通知设置页面
         val intent = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS).apply {
                 putExtra(Settings.EXTRA_APP_PACKAGE, context.packageName)
             }
         } else {
+            //跳转到应用详细设置页面
             Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
                 data = "package:${context.packageName}".toUri()
             }
@@ -36,12 +38,12 @@ fun scheduleReminder(context: Context, todo: Todo) {
         return
 
     }
-    // 检查是否允许 exact alarm
+    // Android 12+，检查是否允许 exact alarm
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
         if (!alarmManager.canScheduleExactAlarms()) {
 
             val intent = Intent(Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM).apply {
-                data = "package:${packageName}".toUri() // 使用 toUri() 替代 Uri.parse()
+                data = "package:${packageName}".toUri()
                 addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             }
             appContext.startActivity(intent)
@@ -62,7 +64,7 @@ fun scheduleReminder(context: Context, todo: Todo) {
 
     fun setAlarm(timeMillis: Long, requestCodeOffset: Int,autoDone: Boolean) {
         if (timeMillis <= System.currentTimeMillis()) return
-
+        // 2. 创建广播意图，携带待办数据
         val intent = Intent(context, TodoReminderReceiver::class.java).apply {
             putExtra("todo_id", todo.id)
             putExtra("title", todo.title)
@@ -77,7 +79,7 @@ fun scheduleReminder(context: Context, todo: Todo) {
             intent,
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
-        //记录、注册info
+        // 设置高优先级闹钟
         val info = AlarmManager.AlarmClockInfo(timeMillis, pendingIntent)
         alarmManager.setAlarmClock(info, pendingIntent)
 
@@ -96,11 +98,12 @@ fun cancelReminder(context: Context, todo: Todo) {
             context,
             requestCode,
             intent,
+            //如果PendingIntent已存在，更新其Extra数据
+            //从Android 12开始，创建PendingIntent时必须指定FLAG_IMMUTABLE或FLAG_MUTABLE！
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
         alarmManager.cancel(pendingIntent)
     }
-
     cancel(1) // 取消自定义提醒
     cancel(2) // 取消截止提醒
 }

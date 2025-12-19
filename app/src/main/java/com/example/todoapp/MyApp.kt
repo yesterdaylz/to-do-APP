@@ -18,7 +18,9 @@ class MyApp : Application() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val soundUri: Uri = "android.resource://${packageName}/${R.raw.todo_reminder}".toUri()
             val audioAttributes = AudioAttributes.Builder()
+                //设置音频用途为通知音
                 .setUsage(AudioAttributes.USAGE_NOTIFICATION) // 或 USAGE_ALARM
+                //设置内容类型为声音提示
                 .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
                 .build()
 
