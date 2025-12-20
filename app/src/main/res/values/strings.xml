@@ -186,6 +186,8 @@
     <string name="todo_filter_no_results">没有找到符合条件的待办事项</string>
 
     <string name="menu_lang">中英切换</string>
+    <string name="todo_title">待办</string>
+
 
 </resources>
 

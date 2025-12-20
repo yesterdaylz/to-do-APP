@@ -2,7 +2,7 @@
 <resources>
     <color name="lemon">#FF000000</color>
     <color name="black">#FFFFFFFF</color>
-    <color name="white">#FFFEF6</color>
+    <color name="white">#FFFFFFFF</color>
     <color name="dialog">#FF000000</color>
     <color name="picker_btn">#FFFFFFFF</color>
 </resources>

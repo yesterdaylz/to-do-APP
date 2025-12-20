@@ -66,10 +66,10 @@ class RecordFragment : Fragment() {
             axisLeft.axisMinimum = 0f
             legend.isEnabled = true
             setScaleEnabled(false)  // 禁用缩放
-            setFitBars(true)
+            setFitBars(true)//自动调整图表视图以完整显示所有条形
             xAxis.setDrawGridLines(false) // 隐藏X轴网格线
             axisLeft.setDrawGridLines(true) // 显示Y轴网格线
-            axisLeft.setDrawAxisLine(true)
+            axisLeft.setDrawAxisLine(true)//绘制左侧 Y 轴的轴线
             //setViewPortOffsets(80f, 80f, 10f, 50f)
             xAxis.textColor = textColor
             axisLeft.textColor = textColor
@@ -83,6 +83,7 @@ class RecordFragment : Fragment() {
             val db = withContext(Dispatchers.IO) {
                 TodoDatabase.getInstance(requireContext())
             }
+            //持续监听数据库数据流的变化
             db.timeRecordDAO().getAllRecord(username).collectLatest { list ->
                 updateTodayData(list)
                 updateChart(list)
@@ -102,6 +103,7 @@ class RecordFragment : Fragment() {
         val todayDuration = list.filter {
             it.startTime in startOfToday until endOfToday
         }
+        //列表中元素的个数
         val count = todayDuration.size
         val minutes = todayDuration.sumOf { it.duration }
         binding.tvTodayInfo.text = getString(R.string.record_today_info, count, minutes)
@@ -128,6 +130,7 @@ class RecordFragment : Fragment() {
                 it.startTime in dayStart until dayEnd
             }
             val minutes = dayDuration.sumOf { it.duration }
+            //将当前日期格式化为字符串
             labels.add(dateFormat.format(Date(dayStart)))
             entries.add(BarEntry(i.toFloat(), minutes.toFloat()))
             calendar.timeInMillis +=  dayMills
@@ -136,15 +139,13 @@ class RecordFragment : Fragment() {
         //dataSet.color = Color.parseColor("#4CAF50")
         dataSet.color = "#4CAF50".toColorInt()
         val barData = BarData(dataSet)
-        barData.barWidth = 0.6f
+        barData.barWidth = 0.6f//设置柱状图中每个柱子的宽度
         binding.barChart.data = barData
-        // x 轴标签
-        binding.barChart.xAxis.valueFormatter = IndexAxisValueFormatter(labels)
+        binding.barChart.xAxis.valueFormatter = IndexAxisValueFormatter(labels)// x 轴标签
         binding.barChart.xAxis.labelCount = labels.size
-        binding.barChart.animateXY(1000,1000)
+        binding.barChart.animateXY(1000,1000)//动画
         //binding.barChart.xAxis.setAvoidFirstLastClipping(true) // 避免首尾标签被裁剪
-        //刷新图表显示
-        binding.barChart.invalidate()
+        binding.barChart.invalidate()//刷新图表显示
     }
     override fun onDestroyView() {
         super.onDestroyView()

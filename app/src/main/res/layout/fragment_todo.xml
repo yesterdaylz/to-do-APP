@@ -21,7 +21,7 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            app:title="待办"
+            app:title="@string/todo_title"
             app:titleTextColor="@color/black"
             app:navigationIconTint="@color/black"
             app:menu="@menu/todo_menu"

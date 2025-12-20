@@ -70,6 +70,7 @@ class TodoFragment : Fragment(R.layout.fragment_todoitem) {
             when (it.itemId) {
 
                 R.id.night -> {
+                    //提取出夜间模式相关的位
                     val currentNightMode = resources.configuration.uiMode and android.content.res.Configuration.UI_MODE_NIGHT_MASK
                     when (currentNightMode) {
                         android.content.res.Configuration.UI_MODE_NIGHT_YES -> {
@@ -187,6 +188,7 @@ class TodoFragment : Fragment(R.layout.fragment_todoitem) {
         adapter.submitList(filtered)
     }
     private fun toggleLanguage() {
+        //获取当前应用的语言设置，语言环境列表中的第一个（默认）语言环境
         val currentLocale = resources.configuration.locales[0].language
 
         val newLanguageTag = if (currentLocale == "zh") "en" else "zh-CN"
@@ -199,7 +201,6 @@ class TodoFragment : Fragment(R.layout.fragment_todoitem) {
         super.onDestroyView()
         _binding = null
     }
-
 
 
 

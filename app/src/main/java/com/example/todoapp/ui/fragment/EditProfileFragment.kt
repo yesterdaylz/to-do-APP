@@ -132,12 +132,9 @@ class EditProfileFragment : Fragment() {
             val input = requireContext().contentResolver.openInputStream(uri) ?: return null
             val file = File(requireContext().filesDir, "avatar_${System.currentTimeMillis()}.jpg")
             val output = FileOutputStream(file)
-
             input.copyTo(output)
-
             input.close()
             output.close()
-
             file.absolutePath
         } catch (e: Exception) {
             e.printStackTrace()

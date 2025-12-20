@@ -149,6 +149,7 @@
     <string name="todo_delete_cancel">I clicked it by accident</string>
     <string name="todo_filter_no_results">No to-do items matching the criteria were found</string>
     <string name="menu_lang">Language Switch</string>
+    <string name="todo_title">Todo</string>
 
 
 </resources>
