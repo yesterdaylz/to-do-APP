@@ -57,6 +57,7 @@ dependencies {
     implementation(libs.androidx.room.runtime)
     // Room 注解处理器（使用 KSP）
     ksp(libs.androidx.room.compiler)
+    implementation("cn.leancloud:storage-android:8.2.28")
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.9.4")
     implementation("androidx.fragment:fragment-ktx:1.8.9")
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.9.4")

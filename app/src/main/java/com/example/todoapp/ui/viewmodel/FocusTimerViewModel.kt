@@ -54,6 +54,9 @@ class FocusTimerViewModel(
     private var inBreak: Boolean = false
     private var currentPomodoro: Int = 1
     private var totalWorkMinutes: Int = 0
+    private var remainingSecondsCache: Long = 0
+    private var passedSecondsCache: Int = 0
+
     init {
         updateUi()
     }
@@ -124,22 +127,32 @@ class FocusTimerViewModel(
 
     private fun updatePomodoroInfo() {
         if (config.mode != TimerMode.POMODORO) return
-        val phase = if (inBreak) application.getString(R.string.rest) else application.getString(R.string.focus)
-        _pomodoroInfoLiveData.value = application.getString(R.string.timer_pomodoro_info, currentPomodoro, config.pomodoroCount, phase)
+        val phase = if (inBreak)
+            application.getString(R.string.break_phase)
+        else
+            application.getString(R.string.focus_phase)
+
+        _pomodoroInfoLiveData.value = application.getString(R.string.pomodoro_info, currentPomodoro, config.pomodoroCount, phase)
+
+//        val phase = if (inBreak) application.getString(R.string.rest) else application.getString(R.string.focus)
+//        _pomodoroInfoLiveData.value = application.getString(R.string.timer_pomodoro_info, currentPomodoro, config.pomodoroCount, phase)
 
     }
     //正计时
     private fun startStopwatch() {
         stopwatchJob?.cancel()
         stopwatchJob = viewModelScope.launch {
-            var passedSeconds = 0
-            val targetSeconds = config.minutes * 60
-            _isFocusLiveData.value = true
-            while (passedSeconds < targetSeconds) {
+            var passedSeconds = passedSecondsCache
+
+            val target = config.minutes * 60
+
+            while (passedSeconds < target) {
                 delay(1000)
                 passedSeconds++
+                passedSecondsCache = passedSeconds  // 保存进度
                 _timeLiveData.value = formatTime(passedSeconds)
             }
+            passedSecondsCache = 0
             // 完成一次专注
             isRunning = false
             durationEnded = true
@@ -154,13 +167,23 @@ class FocusTimerViewModel(
     private fun startCountdown(totalSeconds: Long) {
         countdownJob?.cancel()
         countdownJob = viewModelScope.launch {
-            var remainingSeconds = totalSeconds
+            var remainingSeconds = if (remainingSecondsCache > 0) {
+                remainingSecondsCache
+            } else {
+                totalSeconds
+            }
+
             _isFocusLiveData.value = true
+
             while (remainingSeconds > 0) {
                 delay(1000)
                 remainingSeconds--
+                remainingSecondsCache = remainingSeconds    // 保存状态
                 _timeLiveData.value = formatTime(remainingSeconds.toInt())
             }
+            // 结束清除缓存
+            remainingSecondsCache = 0
+
             _timeLiveData.value = formatTime(0)
 
             when (config.mode) {
@@ -208,7 +231,7 @@ class FocusTimerViewModel(
             while (remainingSeconds > 0) {
                 delay(1000)
                 remainingSeconds--
-                _timeLiveData.value = application.getString(R.string.rest) + formatTime(remainingSeconds)
+                _timeLiveData.value = formatTime(remainingSeconds)
 
             }
             // 休息结束，下一轮工作

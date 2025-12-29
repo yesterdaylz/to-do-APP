@@ -187,6 +187,10 @@
 
     <string name="menu_lang">中英切换</string>
     <string name="todo_title">待办</string>
+    <string name="focus_phase">专注</string>
+    <string name="break_phase">休息</string>
+    <string name="pomodoro_info">第 %1$d/%2$d 轮 · %3$s</string>
+
 
 
 </resources>
