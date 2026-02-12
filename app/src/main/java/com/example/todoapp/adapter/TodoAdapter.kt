@@ -34,7 +34,6 @@ class TodoAdapter (
         R.drawable.bg_todo_10
     )
     class TodoViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        //val cardTodo :com.google.android.material.card.MaterialCardView= itemView.findViewById(R.id.cardTodo)
         val img: ImageView = itemView.findViewById(R.id.img)
         val tvTitle: TextView = itemView.findViewById(R.id.tvTitle)
         val tvDescription: TextView = itemView.findViewById(R.id.tvDescription)

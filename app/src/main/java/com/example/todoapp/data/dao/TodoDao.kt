@@ -11,7 +11,8 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface TodoDao {
-    //按是否置顶降序（1，0），截止日期升序排序（早的在前）
+    //按是否置顶降序（1，0）
+    // 截止日期升序排序（早的在前）
     @Query("SELECT * FROM todo WHERE username = :username ORDER by pin DESC ,dueDay ASC")
     fun getTodoByUser(username: String): Flow<List<Todo>>
 
@@ -26,6 +27,7 @@ interface TodoDao {
 
     @Query("SELECT * FROM todo WHERE id = :id LIMIT 1")
     suspend fun getTodoById(id: Long): Todo?
+
     @Query("UPDATE todo SET done = :done WHERE id = :id")
     suspend fun setDone(id: Long, done: Boolean)
 

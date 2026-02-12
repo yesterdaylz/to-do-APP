@@ -1,4 +1,5 @@
-//import jdk.tools.jlink.resources.plugins
+@file:Suppress("DEPRECATION")
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -55,22 +56,22 @@ android {
 
 dependencies {
     implementation(libs.androidx.room.runtime)
-    // Room 注解处理器（使用 KSP）
     ksp(libs.androidx.room.compiler)
-    implementation("cn.leancloud:storage-android:8.2.28")
-    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.9.4")
-    implementation("androidx.fragment:fragment-ktx:1.8.9")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.9.4")
-    implementation("androidx.work:work-runtime-ktx:2.11.0")
-    implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
-    implementation("com.squareup.retrofit2:retrofit:2.12.0")
-    implementation("com.squareup.retrofit2:converter-gson:2.12.0")
-    implementation("com.squareup.okhttp3:okhttp:4.12.0")
-    implementation("com.squareup.okhttp3:logging-interceptor:4.12.0")
-    implementation("androidx.core:core-splashscreen:1.2.0")
-    //  Room 的 Kotlin 扩展和协程支持
+    implementation(libs.androidx.fragment)
+    implementation(libs.androidx.lifecycle.livedata)
+    implementation(libs.androidx.lifecycle.viewmodel)
+    implementation(libs.androidx.lifecycle.runtime)
+    implementation(libs.androidx.work.runtime)
+    implementation(libs.squareup.retrofit2)
+    implementation(libs.converter.gson)
+    implementation(libs.squareup.okhttp3.okhttp)
+    implementation(libs.squareup.okhttp3.logging.interceptor)
+    implementation(libs.androidx.splashscreen)
+    implementation(libs.mpandroidChart)
     implementation(libs.androidx.room.ktx)
     implementation(libs.androidx.core.ktx)
+    implementation(libs.kotlinx.coroutines.android)
+    implementation(libs.kotlinx.coroutines.core)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
     implementation(libs.androidx.activity)

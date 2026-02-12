@@ -20,19 +20,16 @@
         android:theme="@style/Theme.ToDoApp">
 
         <activity
-            android:name=".ui.activity.ChangePasswordActivity"
+            android:name=".ui.auth.changePwd.ChangePwdActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.activity.FocusTimerActivity"
+            android:name=".ui.focus.FocusTimerActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.activity.EditProfileActivity"
+            android:name=".ui.auth.register.RegisterActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.activity.RegisterActivity"
-            android:exported="false" />
-        <activity
-            android:name=".ui.activity.LoginActivity"
+            android:name=".ui.auth.login.LoginActivity"
             android:exported="true"
             android:theme="@style/Theme.TodoApp.Starting">
             <intent-filter>
@@ -48,7 +45,7 @@
             android:exported="false" />
 
         <activity
-            android:name=".ui.activity.MainActivity"
+            android:name=".ui.main.MainActivity"
             android:enabled="true"
             android:exported="false" />
     </application>

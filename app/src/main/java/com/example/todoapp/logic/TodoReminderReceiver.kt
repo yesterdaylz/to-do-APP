@@ -11,8 +11,8 @@ import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.example.todoapp.R
-import com.example.todoapp.data.database.TodoDatabase
-import com.example.todoapp.ui.activity.MainActivity
+import com.example.todoapp.Repository
+import com.example.todoapp.ui.main.MainActivity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -28,9 +28,8 @@ class TodoReminderReceiver : BroadcastReceiver() {
 
         if (autoDone && todoId != -1L) {
             CoroutineScope(Dispatchers.IO).launch {
-                TodoDatabase.getInstance(context.applicationContext)
-                    .todoDao()
-                    .setDone(todoId, true)
+                Repository.getInstance(context.applicationContext)
+                    .setTodoDone(todoId, true)
             }
         }
         //检查权限

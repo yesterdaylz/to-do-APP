@@ -116,7 +116,7 @@
     <string name="text_default_time">25:00</string>
     <string name="button_start">开始</string>
     <string name="button_finish">结束</string>
-    <string name="login_welcome">欢迎登录</string>
+    <string name="login_welcome">🎉欢迎登录</string>
     <string name="username_hint">账号</string>
     <string name="password_hint">密码</string>
     <string name="remember_password">记住密码</string>
@@ -190,6 +190,7 @@
     <string name="focus_phase">专注</string>
     <string name="break_phase">休息</string>
     <string name="pomodoro_info">第 %1$d/%2$d 轮 · %3$s</string>
+    <string name="add_todo">增加待办</string>
 
 
 
