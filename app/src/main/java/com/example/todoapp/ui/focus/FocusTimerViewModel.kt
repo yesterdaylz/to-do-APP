@@ -163,7 +163,7 @@ class FocusTimerViewModel(
             _isFocusLiveData.value = st.isRunning
         }
 
-        // BGM 控制（保持你的逻辑）
+        // BGM 控制
         if (_isBgmEnabledLiveData.value == true && st.isRunning && _isFocusLiveData.value == true) {
             _timerSoundState.postValue("PLAY")
         } else {

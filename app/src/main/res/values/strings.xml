@@ -30,7 +30,6 @@
     <string name="success_register">注册成功，请登录</string>
 
 
-
     <string name="permission_notification_granted">通知权限已授予</string>
     <string name="permission_notification_denied">缺少通知权限，可能影响功能使用</string>
     <string name="notification">待办提醒</string>
@@ -43,20 +42,10 @@
     <string name="exit_app_confirmation">再按一次退出</string>
 
 
-
-
     <string name="error_add_todo_failed">添加待办事项失败: %s</string>
     <string name="error_update_todo_failed">更新待办事项失败: %s</string>
     <string name="error_delete_todo_failed">删除待办事项失败: %s</string>
     <string name="error_toggle_done_failed">更新完成状态失败: %s</string>
-
-
-
-
-
-
-
-
 
 
     <string name="button_pause">暂停</string>
@@ -94,9 +83,6 @@
     <!-- 选择器标题 -->
     <string name="date_picker_title">选择日期</string>
     <string name="time_picker_title">选择时间</string>
-
-
-
 
 
     <string name="old_password">原密码</string>
@@ -191,7 +177,6 @@
     <string name="break_phase">休息</string>
     <string name="pomodoro_info">第 %1$d/%2$d 轮 · %3$s</string>
     <string name="add_todo">增加待办</string>
-
 
 
 </resources>
